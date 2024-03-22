@@ -22,9 +22,9 @@ public class Caregiver extends Person {
 	}
 	
 	// Add a new service order to the list of service orders
-		public void addServiceOrder(ServiceOrder newServiceOrder) {
-			// TODO: add stuff here
-		}
+	public void addServiceOrder(ServiceOrder newServiceOrder) {
+		// TODO: add stuff here
+	}
 	
 	// Getters and setters...
 
