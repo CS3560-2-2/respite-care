@@ -1,19 +1,19 @@
-// Person class
+package Model;// Model.Person class
 // Used to store personal information
 
 public class Person {
 
 	// Physical address(es) of this person
 	private Address[] addresses;
-	// Person's first name
+	// Model.Person's first name
 	private String firstName;
-	// Person's last name
+	// Model.Person's last name
 	private String lastName;
-	// Person's phone number (NOTE: do we want to allow multiple of these?)
+	// Model.Person's phone number (NOTE: do we want to allow multiple of these?)
 	private String phoneNumber;
-	// Person's email address (NOTE: do we want to allow multiple of these?)
+	// Model.Person's email address (NOTE: do we want to allow multiple of these?)
 	private String emailAddress;
-	// NOTE: No unique key value for Person objects (should this be changed?)
+	// NOTE: No unique key value for Model.Person objects (should this be changed?)
 
 	public Person(String firstName, String lastName) {
 		this.firstName = firstName;

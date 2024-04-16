@@ -1,4 +1,4 @@
-// Attachment class
+package Model;// Model.Attachment class
 // Used to hold information about attached files
 
 public class Attachment {

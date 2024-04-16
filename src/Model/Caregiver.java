@@ -1,5 +1,5 @@
-// Caregiver class
-// Extends Person class
+package Model;// Model.Caregiver class
+// Extends Model.Person class
 // Used to store caregiver information
 
 public class Caregiver extends Person {

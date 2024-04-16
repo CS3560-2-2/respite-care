@@ -1,4 +1,4 @@
-// TimeRange class
+package Model;// Model.TimeRange class
 // Holds information about a duration of time
 
 public class TimeRange {

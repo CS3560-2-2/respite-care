@@ -1,4 +1,4 @@
-// Timesheet class
+package Model;// Model.Timesheet class
 // Used to store timesheet information
 
 public class Timesheet {

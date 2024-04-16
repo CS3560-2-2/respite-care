@@ -1,4 +1,4 @@
-// TimesheetCell class
+package Model;// Model.TimesheetCell class
 // Holds information about on a specific cell within a larger timesheet
 
 public class TimesheetCell {

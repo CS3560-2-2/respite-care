@@ -1,4 +1,4 @@
-// Address class
+package Model;// Model.Address class
 // Used to store address information
 
 public class Address {

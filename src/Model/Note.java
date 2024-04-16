@@ -1,4 +1,4 @@
-// Note class
+package Model;// Model.Note class
 // Used to store basic information about notes
 
 public class Note {

@@ -1,5 +1,5 @@
-// Client class
-// Extends Person class
+package Model;// Model.Client class
+// Extends Model.Person class
 // Used to store client information
 
 public class Client extends Person {

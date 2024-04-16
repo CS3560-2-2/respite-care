@@ -1,11 +1,11 @@
-// AdminCaregiverNote
+package Model;// Model.AdminCaregiverNote
 // Used to store information on notes between administrators and caregivers
 
 public class AdminCaregiverNote extends Note {
 	
-	// Administrator related to this note
+	// Model.Administrator related to this note
 	private Administrator admin;
-	// Caregiver related to this note
+	// Model.Caregiver related to this note
 	private Caregiver caregiver;
 	
 	public AdminCaregiverNote(int urgency, String text, Administrator admin, Caregiver caregiver) {

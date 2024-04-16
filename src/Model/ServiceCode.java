@@ -1,4 +1,4 @@
-// ServiceCode class
+package Model;// Model.ServiceCode class
 // Holds information about service codes
 
 public class ServiceCode {

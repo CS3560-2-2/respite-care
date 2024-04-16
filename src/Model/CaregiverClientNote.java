@@ -1,11 +1,11 @@
-// CaregiverClientNote
+package Model;// Model.CaregiverClientNote
 // Used to store information on notes between caregivers and clients
 
 public class CaregiverClientNote extends Note {
 	
-	// Caregiver related to this note
+	// Model.Caregiver related to this note
 	private Caregiver caregiver;
-	// Client related to this note
+	// Model.Client related to this note
 	private Client client;
 	
 	public CaregiverClientNote(int urgency, String text, Caregiver caregiver, Client client) {

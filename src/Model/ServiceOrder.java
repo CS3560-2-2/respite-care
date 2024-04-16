@@ -1,4 +1,4 @@
-// ServiceOrder class
+package Model;// Model.ServiceOrder class
 // Holds information related to client service orders
 
 public class ServiceOrder {

@@ -1,5 +1,5 @@
-// Administrator class
-// Extends Person class
+package Model;// Model.Administrator class
+// Extends Model.Person class
 // Used to store administrator information
 
 public class Administrator extends Person {
