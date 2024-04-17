@@ -40,7 +40,7 @@ public class PortalWindow extends JPanel {
 			Main.setCurrentPanel(new TimesheetWindow());
 		});
 		JButton butServiceOrders = new JButton("Manage Service Orders");
-		butServiceOrders.addActionListener(e -> {}); // TODO: This does nothing as of now
+		butServiceOrders.addActionListener(e -> {Main.setCurrentPanel(new ServiceOrderWindow());});
 		JButton butSubmitFeedback = new JButton("Submit Feedback");
 		butSubmitFeedback.addActionListener(e -> {}); // TODO: This does nothing as of now
 		          
