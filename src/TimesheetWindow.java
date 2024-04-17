@@ -1,144 +1,116 @@
-import java.awt.Color;
+import View.TimesheetEntryPreview;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
-public class TimesheetWindow implements ActionListener{
-	JFrame frame;
-	JLabel[] timesheetLabels;
-	JButton[] timesheetButtons;
+public class TimesheetWindow extends JPanel {
+
 	JButton butAddEntry;
 	JButton butNext;
 	JButton butPrev;
 	JLabel labPages;
 	final int TIMESHEETS_PER_PAGE = 3;
 	int currentPage;
-	
+
+	int ENTRIES_VISIBLE = 3;
+
+	int numPages = 0;
+	JPanel entryPanel;
+
 	// TODO: Get these from somewhere else
 	String employeeName = "Rea L. Employee";
 	// TODO: This should eventually use the Timesheet class instead!
-	String[] dates = {"02/23/2024", "02/24/2024", "02/25/2024", "02/27/2024"};
-	String[] serviceOrders = {"01234", "01234", "01234", "05678"};
-	String[] times = {"10:30AM - 3:30PM", "11:30AM - 4:30PM", "10:00AM - 5:00PM", "2:30PM - 7:30PM"};
-	
+	int[] entryIDs = {123456789, 807648321, 789123456, 987654123, 136816};
 	public TimesheetWindow()
 	{
-		frame = new JFrame();
+		super();
 		currentPage = 0;
+		numPages = (int)Math.ceil((float)entryIDs.length / (float)ENTRIES_VISIBLE);
+		this.setLayout(new BorderLayout());
+
+		JPanel topInfoLayout = new JPanel();
+		topInfoLayout.setLayout(new BoxLayout(topInfoLayout, BoxLayout.PAGE_AXIS));
 
 		// Labels (text)
 		JLabel labTimeTable = new JLabel("Timetable View");
-		labTimeTable.setBounds(25, 0, 500, 40);
 		JLabel labEmployee = new JLabel("Employee: " + employeeName);
-		labEmployee.setBounds(25,25,500, 40);
-		labPages = new JLabel("Page " + (currentPage + 1) + "/" + (dates.length / TIMESHEETS_PER_PAGE + 1));
-		labPages.setBounds(25, 300, 500, 40);
-		
-		// Buttons
+
+		butAddEntry = new JButton("+ Add Entry");
+		butAddEntry.addActionListener(e -> {});
+
+		topInfoLayout.add(labTimeTable);
+		topInfoLayout.add(labEmployee);
+		topInfoLayout.add(butAddEntry);
+
+		JPanel pageSelectLayout = new JPanel();
+
 		butPrev = new JButton("Prev");
-		butPrev.setBounds(100, 310, 75, 20);
-		butPrev.addActionListener(this);
+		butPrev.addActionListener(e -> {changePageOn(-1);});
 		butPrev.setEnabled(false);
 		butNext = new JButton("Next");
-		butNext.setBounds(200, 310, 75, 20);
-		butNext.addActionListener(this);
-		butAddEntry = new JButton("+ Add Entry");
-		butAddEntry.setBounds(450, 10, 100, 50);
-		butAddEntry.addActionListener(this);
+		butNext.addActionListener(e -> {changePageOn(1);});
+		labPages = new JLabel("Page " + (currentPage + 1) + "/" + numPages);
+		labPages.setBounds(25, 300, 500, 40);
 
+
+		pageSelectLayout.add(butPrev);
+		pageSelectLayout.add(labPages);
+		pageSelectLayout.add(butNext);
+
+
+		entryPanel = new JPanel();
+		entryPanel.setLayout(new BoxLayout(entryPanel, BoxLayout.PAGE_AXIS));
+
+
+
+		this.add(topInfoLayout, BorderLayout.BEFORE_FIRST_LINE);
+		this.add(entryPanel, BorderLayout.CENTER);
+		this.add(pageSelectLayout, BorderLayout.AFTER_LAST_LINE);
 		
-		// Add the labels and buttons to the frame
-		frame.add(labTimeTable);
-		frame.add(labEmployee);
-		frame.add(labPages);
-		frame.add(butPrev);
-		frame.add(butNext);
-		frame.add(butAddEntry);
+		setTimesheetVisibility(ENTRIES_VISIBLE, 0);
 		
-		// TODO: Use an employee's Timesheet here instead!
-		timesheetLabels = new JLabel[dates.length];
-		timesheetButtons = new JButton[dates.length];
-		for (int i = 0; i < dates.length; i++)
-		{
-			JLabel newTimesheetLabel = new JLabel("<html>Date: " + dates[i] + "<br>"
-					+ "Service Order #: " + serviceOrders[i] + "<br>"
-					+ "Time: " + times[i]);
-			newTimesheetLabel.setBounds(0, 75 + ((i % TIMESHEETS_PER_PAGE) * 75), 600, 50);
-			newTimesheetLabel.setOpaque(true);
-			newTimesheetLabel.setBackground(Color.lightGray);
-			
-			JButton newTimesheetButton = new JButton("Edit Entry");
-			newTimesheetButton.setBounds(450, 75 + ((i % TIMESHEETS_PER_PAGE) * 75), 100, 50);
-			
-			frame.add(newTimesheetLabel);
-			frame.add(newTimesheetButton);
-			timesheetLabels[i] = newTimesheetLabel;
-			timesheetButtons[i] = newTimesheetButton;
-		}
-		
-		setTimesheetVisibility();
-		
-		frame.setSize(600, 400);
-		frame.setLayout(null); // Using no layout managers  
-		frame.setVisible(true);
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Timesheets");
+
 	}
 	
 	// Change which timesheet entries are visible depending on the page
-	private void setTimesheetVisibility()
+	private void setTimesheetVisibility(int entriesVisible, int startIndex)
 	{
-		// TODO: Use Timesheet size here instead!
-		for (int i = 0; i < dates.length; i++)
-		{
-			if (i >= currentPage * TIMESHEETS_PER_PAGE && i < (currentPage + 1) * TIMESHEETS_PER_PAGE)
-			{
-				timesheetLabels[i].setVisible(true);
-				timesheetButtons[i].setVisible(true);
-			}
-			else
-			{
-				timesheetLabels[i].setVisible(false);
-				timesheetButtons[i].setVisible(false);
-			}
+		entryPanel.removeAll();
+
+		for(int i = startIndex; i < startIndex + entriesVisible && i < entryIDs.length; i++){
+			entryPanel.add(
+					new TimesheetEntryPreview(entryIDs[i], e -> {}, true)
+			);
 		}
+
+		entryPanel.validate();
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == butNext || e.getSource() == butPrev)
+
+	public void changePageOn(int change) {
+		currentPage += change;
+
+		currentPage = Math.max(Math.min(currentPage, numPages - 1), 0);
+
+		System.out.println("Page has been changed to " + currentPage + " after a change of " + change);
+
+		butNext.setEnabled(true);
+		butPrev.setEnabled(true);
+		if (currentPage <= 0)
 		{
-			if (e.getSource() == butNext)
-			{
-				currentPage++;
-			}
-			else
-			{
-				currentPage--;
-			}
-			
-			butNext.setEnabled(true);
-			butPrev.setEnabled(true);
-			if (currentPage <= 0)
-			{
-				butPrev.setEnabled(false);
-			}
-			// TODO: Use Timesheet size here!
-			if (currentPage >= (dates.length / TIMESHEETS_PER_PAGE))
-			{
-				butNext.setEnabled(false);
-			}
-			
-			labPages.setText("Page " + (currentPage + 1) + "/" + (dates.length / TIMESHEETS_PER_PAGE + 1));
-			setTimesheetVisibility();
+			butPrev.setEnabled(false);
 		}
-		else if (e.getSource() == butAddEntry)
+		// TODO: Use Timesheet size here!
+		if (currentPage >= numPages - 1)
 		{
-			// Open a new window to create a new Timesheet entry
-			// TODO: Get the employee name from database
-			new TimesheetEntryWindow(employeeName);
+			butNext.setEnabled(false);
 		}
+
+		labPages.setText("Page " + (currentPage + 1) + "/" + numPages);
+		setTimesheetVisibility(ENTRIES_VISIBLE, currentPage * ENTRIES_VISIBLE);
 	}
+
+
 }

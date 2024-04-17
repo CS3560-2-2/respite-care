@@ -1,20 +1,13 @@
 import java.time.LocalDate;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-public class TimesheetEntryWindow {
-	JFrame frame;
+public class TimesheetEntryWindow extends JPanel {
 	JTextField textEntryDate;
 	JTextField textStartTime;
 	JTextField textEndTime;
 	JTextField Notes;
 	
 	public TimesheetEntryWindow(String employeeName) {
-		frame = new JFrame();
-		
 		// Labels (text)
 		JLabel labTimeEntry = new JLabel("Add Entry Page");
 		labTimeEntry.setBounds(25, 0, 200, 40);
@@ -50,19 +43,13 @@ public class TimesheetEntryWindow {
 
 		
 		// Add the labels and buttons to the frame
-		frame.add(labTimeEntry);
-		frame.add(labEmployee);
-		frame.add(labEntryDate);
-		frame.add(labStartTime);
-		frame.add(labEndTime);
-		frame.add(labServiceOrder);
-		frame.add(labNotes);
-		frame.add(textEntryDate);
-		
-		frame.setSize(600, 400);
-		frame.setLayout(null); // Using no layout managers  
-		frame.setVisible(true);
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Add Timesheet Entry");
+		this.add(labTimeEntry);
+		this.add(labEmployee);
+		this.add(labEntryDate);
+		this.add(labStartTime);
+		this.add(labEndTime);
+		this.add(labServiceOrder);
+		this.add(labNotes);
+		this.add(textEntryDate);
 	}
 }
