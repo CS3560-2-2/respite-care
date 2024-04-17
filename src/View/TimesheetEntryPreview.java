@@ -16,6 +16,7 @@ public class TimesheetEntryPreview extends JPanel {
 
         JButton editButton = new JButton("Edit");
         editButton.setEnabled(editEnabled);
+        // TODO: call `TimesheetEntryWindow(String employeeName, int entryID)` when clicked
         this.add(editButton, BorderLayout.LINE_END);
     }
 }

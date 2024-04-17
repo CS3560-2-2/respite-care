@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 public class TimesheetWindow extends JPanel {
-
-	JButton butAddEntry;
 	JButton butNext;
 	JButton butPrev;
 	JLabel labPages;
@@ -37,12 +35,17 @@ public class TimesheetWindow extends JPanel {
 		JLabel labTimeTable = new JLabel("Timetable View");
 		JLabel labEmployee = new JLabel("Employee: " + employeeName);
 
-		butAddEntry = new JButton("+ Add Entry");
-		butAddEntry.addActionListener(e -> {});
+		JButton butAddEntry = new JButton("+ Add Entry");
+		butAddEntry.addActionListener(e -> {
+			Main.setCurrentPanel(new TimesheetEntryWindow(employeeName));
+		});
+		JButton butBack = new JButton("Back");
+		butBack.addActionListener(e -> {Main.previousPanel();});
 
 		topInfoLayout.add(labTimeTable);
 		topInfoLayout.add(labEmployee);
 		topInfoLayout.add(butAddEntry);
+		topInfoLayout.add(butBack);
 
 		JPanel pageSelectLayout = new JPanel();
 

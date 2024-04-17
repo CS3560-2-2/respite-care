@@ -2,11 +2,6 @@ import java.awt.*;
 import javax.swing.*;
 
 public class PortalWindow extends JPanel {
-	JFrame frame;
-	JButton butTimeSheets;
-	JButton butServiceOrders;
-	JButton butSubmitFeedback;
-	
 	// TODO: Get these from somewhere else
 	String userName = "Rea L. User";
 	String position = "Manager";
@@ -40,13 +35,13 @@ public class PortalWindow extends JPanel {
 		buttonLayout.setLayout(new BoxLayout(buttonLayout, BoxLayout.PAGE_AXIS));
 
 		// Buttons
-		butTimeSheets = new JButton("Time Sheets");
+		JButton butTimeSheets = new JButton("Time Sheets");
 		butTimeSheets.addActionListener(e -> {
 			Main.setCurrentPanel(new TimesheetWindow());
 		});
-		butServiceOrders = new JButton("Manage Service Orders");
+		JButton butServiceOrders = new JButton("Manage Service Orders");
 		butServiceOrders.addActionListener(e -> {}); // TODO: This does nothing as of now
-		butSubmitFeedback = new JButton("Submit Feedback");
+		JButton butSubmitFeedback = new JButton("Submit Feedback");
 		butSubmitFeedback.addActionListener(e -> {}); // TODO: This does nothing as of now
 		          
 		// Add the buttons and labels to the frame
