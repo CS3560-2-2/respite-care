@@ -1,4 +1,4 @@
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.time.LocalDate;
 import javax.swing.*;
 
@@ -6,7 +6,7 @@ public class TimesheetEntryWindow extends JPanel {
 	JTextField textEntryDate;
 	JTextField textStartTime;
 	JTextField textEndTime;
-	JTextField textNotes;
+	JTextArea textNotes;
 	JComboBox comboServiceOrder;
 	
 	// TODO: Get this data from somewhere else
@@ -24,39 +24,63 @@ public class TimesheetEntryWindow extends JPanel {
 	
 	// Called when updating an existing entry
 	public TimesheetEntryWindow(String employeeName, int entryID) {
-		// Labels (text)
-		JLabel labTimeEntry = new JLabel("Add Entry Page");
-		labTimeEntry.setBounds(25, 0, 200, 40);
-		JLabel labEmployee = new JLabel("Adding Timetable Entry For: " + employeeName);
-		labEmployee.setBounds(25, 25, 500, 40);
+
+		this.setLayout(new BorderLayout());
+
+		JLabel labEmployee = new JLabel("Creating Timetable Entry For: " + employeeName);
+		this.add(labEmployee, BorderLayout.BEFORE_FIRST_LINE);
+
+		JPanel entryDataPanel = new JPanel();
+		entryDataPanel.setLayout(new BoxLayout(entryDataPanel, BoxLayout.PAGE_AXIS));
+
+		JPanel entryDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel labEntryDate = new JLabel("Entry Date: ");
-		labEntryDate.setBounds(25, 50, 200, 40);
-		JLabel labStartTime = new JLabel("Start Time: ");
-		labStartTime.setBounds(25, 75, 200, 40);
-		JLabel labEndTime = new JLabel("End Time: ");
-		labEndTime.setBounds(25, 100, 200, 40);
-		JLabel labServiceOrder = new JLabel("Service Order: ");
-		labServiceOrder.setBounds(25, 125, 200, 40);
-		JLabel labNotes = new JLabel("Notes: ");
-		labNotes.setBounds(25, 150, 200, 40);
-		
-		// Text input fields
 		LocalDate currentDate = java.time.LocalDate.now();
 		int month = currentDate.getMonthValue();
 		int day = currentDate.getDayOfMonth();
 		int year = currentDate.getYear();
 		textEntryDate = new JTextField(month + "/" + day + "/" + year);
-		textEntryDate.setBounds(150, 50, 300, 40);
-		textStartTime = new JTextField();
-		textStartTime.setBounds(150, 75, 300, 40);
+		textEntryDate.setMaximumSize(new Dimension(100, 40));
+		entryDatePanel.add(labEntryDate);
+		entryDatePanel.add(textEntryDate);
+		entryDataPanel.add(entryDatePanel);
+
+		JPanel entryStartPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel labStartTime = new JLabel("Start Time: ");
+		textStartTime = new JTextField("3:45pm");
+		textStartTime.setColumns(8);
+		entryStartPanel.add(labStartTime);
+		entryStartPanel.add(textStartTime);
+		entryDataPanel.add(entryStartPanel);
+
+		JPanel entryEndPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel labEndTime = new JLabel("End Time: ");
 		textEndTime = new JTextField();
-		textEndTime.setBounds(150, 100, 300, 40);
-		textNotes = new JTextField();
-		textNotes.setBounds(150, 150, 300, 300);
-		
-		// Combobox (dropdown menu)
+		textEndTime.setColumns(8);
+		entryEndPanel.add(labEndTime);
+		entryEndPanel.add(textEndTime);
+		entryDataPanel.add(entryEndPanel);
+
+
+		JPanel entryServiceOrderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel labServiceOrder = new JLabel("Service Order: ");
 		comboServiceOrder = new JComboBox(assignedServiceOrders);
-		comboServiceOrder.setBounds(150, 125, 300, 40);
+		entryServiceOrderPanel.add(labServiceOrder);
+		entryServiceOrderPanel.add(comboServiceOrder);
+		entryDataPanel.add(entryServiceOrderPanel);
+
+
+		JPanel entryNotesPanel = new JPanel(new BorderLayout());
+		JLabel labNotes = new JLabel("Notes: ");
+		labNotes.setHorizontalAlignment(JLabel.LEFT);
+		textNotes = new JTextArea(4, 50);
+		textNotes.setLineWrap(true);
+		JScrollPane scrollPane = new JScrollPane(textNotes);
+		entryNotesPanel.add(labNotes, BorderLayout.BEFORE_FIRST_LINE);
+		entryNotesPanel.add(scrollPane, BorderLayout.CENTER);
+		entryDataPanel.add(entryNotesPanel);
+
+		this.add(entryDataPanel, BorderLayout.CENTER);
 		
 		// If we've been given an entry ID, pre-populate the fields with the entry's data
 		if (entryID != -1)
@@ -80,24 +104,17 @@ public class TimesheetEntryWindow extends JPanel {
 		{
 			butUpdate.setText("Add Entry");
 		}
-		
-		
-		// Add the items to the frame
-		this.add(labTimeEntry);
-		this.add(labEmployee);
-		this.add(labEntryDate);
-		this.add(labStartTime);
-		this.add(labEndTime);
-		this.add(labServiceOrder);
-		this.add(labNotes);
-		this.add(textEntryDate);
-		this.add(textStartTime);
-		this.add(textEndTime);
-		this.add(comboServiceOrder);
-		this.add(textNotes);
-		this.add(butUpdate);
-		if (entryID == -1) this.add(butDelete);
-		this.add(butCancel);
+
+		JPanel bottomButtonsPannel = new JPanel();
+
+		bottomButtonsPannel.add(butUpdate);
+		bottomButtonsPannel.add(butDelete);
+		bottomButtonsPannel.add(butCancel);
+
+		this.add(bottomButtonsPannel, BorderLayout.AFTER_LAST_LINE);
+
+
+
 	}
 
 	// Gather the data from the fields and submit them
