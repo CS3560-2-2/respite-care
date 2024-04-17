@@ -44,5 +44,6 @@ public class Main {
 		// Switch to the panel directly before it
 		frame.add(panelStack.peek());
 		frame.validate();
+		frame.repaint();
 	}
 }
