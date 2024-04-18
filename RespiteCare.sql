@@ -1,7 +1,20 @@
+/*
+Name:	Matthew Tam
+Group:	2
+Class:	CS3560
+File:	RespiteCare.sql
+Description:
+	Initializes database called RespiteCare, preferably on 
+    local host. 
+*/
+
 DROP DATABASE IF EXISTS RespiteCare;
 
 CREATE DATABASE RespiteCare;
 USE RespiteCare;
+
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL ON respitecare.* TO 'user'@'localhost';
 
 CREATE TABLE Person (
     ssn INT,
@@ -27,6 +40,8 @@ CREATE TABLE Address (
 CREATE TABLE Caregiver (
     caregiverID INT,
     ssn INT,
+    certification VARCHAR(100),
+    hoursWorked INT,
     PRIMARY KEY (caregiverID)
 );
 
@@ -39,6 +54,7 @@ CREATE TABLE Clients (
 
 CREATE TABLE Manager (
 	managerID INT, 
+    ssn INT,
     PRIMARY KEY(managerID)
 );
 
@@ -99,6 +115,9 @@ ALTER TABLE Clients
 ADD FOREIGN KEY (ssn) REFERENCES Person(ssn);
 
 ALTER TABLE Caregiver
+ADD FOREIGN KEY (ssn) REFERENCES Person(ssn);
+
+ALTER TABLE Manager
 ADD FOREIGN KEY (ssn) REFERENCES Person(ssn);
 
 ALTER TABLE Timesheet
