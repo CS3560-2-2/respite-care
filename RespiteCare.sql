@@ -13,6 +13,7 @@ DROP DATABASE IF EXISTS RespiteCare;
 CREATE DATABASE RespiteCare;
 USE RespiteCare;
 
+DROP USER IF EXISTS 'user'@'localhost';
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL ON respitecare.* TO 'user'@'localhost';
 
@@ -79,7 +80,7 @@ CREATE TABLE ServiceOrder (
     totalHoursAllowed INT,
     maxBillAmt INT,
     caseWorkerName VARCHAR(50),
-    PRIMARY KEY (authNumber)
+    PRIMARY KEY (authNumber, medicalNumber)
 );
 
 CREATE TABLE ClientFeedback (
