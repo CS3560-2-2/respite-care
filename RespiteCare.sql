@@ -1,5 +1,5 @@
 /*
-Name:	Matthew Tam
+Name:	Matthew Tam and Simon Nasser
 Group:	2
 Class:	CS3560
 File:	RespiteCare.sql
@@ -13,8 +13,10 @@ DROP DATABASE IF EXISTS RespiteCare;
 CREATE DATABASE RespiteCare;
 USE RespiteCare;
 
-CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL ON respitecare.* TO 'user'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE USER 'admin'@'localhost' IDENTIFIED BY '';
+GRANT ALL ON respitecare.* TO 'admin'@'localhost';
 
 CREATE TABLE Person (
     ssn INT,
@@ -38,11 +40,10 @@ CREATE TABLE Address (
 );
 
 CREATE TABLE Caregiver (
-    caregiverID INT,
     ssn INT,
     certification VARCHAR(100),
     hoursWorked INT,
-    PRIMARY KEY (caregiverID)
+    PRIMARY KEY (ssn)
 );
 
 CREATE TABLE Clients (
@@ -53,22 +54,22 @@ CREATE TABLE Clients (
 );
 
 CREATE TABLE Manager (
-	managerID INT, 
     ssn INT,
-    PRIMARY KEY(managerID)
+    PRIMARY KEY(ssn)
 );
 
 CREATE TABLE Service (
     serviceID INT PRIMARY KEY,
-    serviceType VARCHAR(50)
+    serviceType VARCHAR(50),
+    hourlyRate DECIMAL(5, 2)
 );
 
 INSERT INTO Service VALUES
-	(01, "Housekeeping"),
-    (02, "In Home Medical Care"),
-    (03, "Food"),
-    (04, "Transportation"),
-    (05, "Other");
+	(01, "Housekeeping", 20.00),
+    (02, "In Home Medical Care", 24.45),
+    (03, "Food", 21.95),
+    (04, "Transportation", 23.25),
+    (05, "2on1", 48.75);
     
 CREATE TABLE ServiceOrder (
     authNumber INT,
@@ -77,34 +78,25 @@ CREATE TABLE ServiceOrder (
     startDate DATE,
     endDate DATE,
     totalHoursAllowed INT,
-    maxBillAmt INT,
     caseWorkerName VARCHAR(50),
     PRIMARY KEY (authNumber)
 );
 
-CREATE TABLE ClientFeedback (
-    feedbackID INT,
-    authNumber INT,
-    medicalNumber INT,
+CREATE TABLE Note (
+    author INT,
+    target INT,
     text VARCHAR(2048),
-    PRIMARY KEY (feedbackID , authNumber , medicalNumber)
-);
-
-CREATE TABLE CareNote (
-    noteID INT,
-    authNumber INT,
-    caregiverID INT,
-    text VARCHAR(2048),
-    PRIMARY KEY (noteID , authNumber , caregiverID)
+    timea datetime,
+    PRIMARY KEY (timea , author)
 );
 
 CREATE TABLE Timesheet (
+	timesheetID INT,
     authNumber INT,
-    caregiverID INT,
-    startDate INT,
-    endDate INT,
-    dayTime VARCHAR(50),
-    PRIMARY KEY (authNumber , caregiverID)
+    ssn INT,
+    startTime DATETIME,
+    endTime DATETIME,
+    PRIMARY KEY (timesheetID)
 );
 
 
@@ -121,22 +113,16 @@ ALTER TABLE Manager
 ADD FOREIGN KEY (ssn) REFERENCES Person(ssn);
 
 ALTER TABLE Timesheet
-ADD FOREIGN KEY (caregiverID) REFERENCES Caregiver(caregiverID),
+ADD FOREIGN KEY (ssn) REFERENCES Caregiver(ssn),
 ADD FOREIGN KEY (authNumber) REFERENCES  ServiceOrder(authNumber);
 
-ALTER TABLE CareNote
-ADD FOREIGN KEY (authNumber)  REFERENCES ServiceOrder(authNumber),
-ADD FOREIGN KEY (caregiverID) REFERENCES Caregiver(caregiverID);
-
-ALTER TABLE ClientFeedback
-ADD FOREIGN KEY (authNumber) REFERENCES ServiceOrder(authNumber),
-ADD FOREIGN KEY (medicalNumber)	 REFERENCES Clients(medicalNumber);
+ALTER TABLE Note
+ADD FOREIGN KEY (author) REFERENCES Person(ssn),
+ADD FOREIGN KEY (target) REFERENCES Person(ssn);
 
 ALTER TABLE ServiceOrder
 ADD FOREIGN KEY (medicalNumber)  REFERENCES Clients(medicalNumber),
 ADD FOREIGN KEY (serviceID) REFERENCES Service(serviceID);
-
-
 
 #Uncomment and run this command if needed.
 #DROP DATABASE respitecare;
