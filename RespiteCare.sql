@@ -13,10 +13,9 @@ DROP DATABASE IF EXISTS RespiteCare;
 CREATE DATABASE RespiteCare;
 USE RespiteCare;
 
-FLUSH PRIVILEGES;
-
-CREATE USER 'admin'@'localhost' IDENTIFIED BY '';
-GRANT ALL ON respitecare.* TO 'admin'@'localhost';
+DROP USER IF EXISTS 'user'@'localhost';
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL ON respitecare.* TO 'user'@'localhost';
 
 CREATE TABLE Person (
     ssn INT,
