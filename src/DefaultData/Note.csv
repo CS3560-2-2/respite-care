@@ -1,0 +1,7 @@
+author ,target ,text ,timea 
+100000061,100000037,Manager note about client. Can be seen by only managers,2024-01-01 00:00:01
+100000045,100000088,Client  note to manager. Can only be seen by respective Caregiver and Manager,2024-01-01 00:00:02
+100000002,100000096,Caregiver note to Manager. Can only be seen by repective caregiver and managers,2024-01-01 00:00:03
+100000118,100000010,Manager note about Caregiver. Can only be seen by managers,2024-01-01 00:00:04
+100000045,100000029,Client note about caregiver. Can only be seen by respective client and managers,2024-01-01 00:00:05
+100000010,100000053,Caregiver note on Client. Can only be seen by respective caregiver and managers,2024-01-01 00:00:06

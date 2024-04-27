@@ -64,11 +64,11 @@ CREATE TABLE Service (
 );
 
 INSERT INTO Service VALUES
-	(01, "Housekeeping", 20.00),
-    (02, "In Home Medical Care", 24.45),
-    (03, "Food", 21.95),
-    (04, "Transportation", 23.25),
-    (05, "2on1", 48.75);
+	(1, "Housekeeping", 20.00),
+    (2, "In Home Medical Care", 24.45),
+    (3, "Food", 21.95),
+    (4, "Transportation", 23.25),
+    (5, "2on1", 48.75);
     
 CREATE TABLE ServiceOrder (
     authNumber INT,
@@ -85,7 +85,7 @@ CREATE TABLE Note (
     author INT,
     target INT,
     text VARCHAR(2048),
-    timea datetime,
+    timea TIMESTAMP,
     PRIMARY KEY (timea , author)
 );
 
@@ -93,8 +93,8 @@ CREATE TABLE Timesheet (
 	timesheetID INT,
     authNumber INT,
     ssn INT,
-    startTime DATETIME,
-    endTime DATETIME,
+    startTime TIMESTAMP,
+    endTime TIMESTAMP,
     PRIMARY KEY (timesheetID)
 );
 
