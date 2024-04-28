@@ -28,7 +28,9 @@ public class ClientNotesView extends JPanel {
             int finalI = i;
             ClientNotePreview preview = new ClientNotePreview(
                     notes[i],
-                    id -> {}
+                    id -> {
+                        Main.setCurrentPanel(new ClientNoteViewer(id));
+                    }
             );
             notesPanel.add(preview);
         }
