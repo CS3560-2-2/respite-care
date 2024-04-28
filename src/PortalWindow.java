@@ -35,20 +35,35 @@ public class PortalWindow extends JPanel {
 		buttonLayout.setLayout(new BoxLayout(buttonLayout, BoxLayout.PAGE_AXIS));
 
 		// Buttons
-		JButton butTimeSheets = new JButton("Time Sheets");
+		JButton butTimeSheets = new JButton("Manage Time Sheets");
 		butTimeSheets.addActionListener(e -> {
 			Main.setCurrentPanel(new TimesheetWindow());
 		});
 		JButton butServiceOrders = new JButton("Manage Service Orders");
 		butServiceOrders.addActionListener(e -> {Main.setCurrentPanel(new ServiceOrderWindow());});
+		JButton butManageNotes = new JButton("Manage Notes");
+		butManageNotes.addActionListener(e -> {Main.setCurrentPanel(new ManagerClientNoteViewer());});
+
+		JButton butTimeSheetsCWorker = new JButton("Time Sheets");
+		butTimeSheetsCWorker.addActionListener(e -> {
+			Main.setCurrentPanel(new TimesheetWindow());
+		});
+
 		JButton butSubmitFeedback = new JButton("Submit Feedback");
-		butSubmitFeedback.addActionListener(e -> {}); // TODO: This does nothing as of now
+		butSubmitFeedback.addActionListener(e -> {Main.setCurrentPanel(new ClientNotesView());}); // TODO: This does nothing as of now
 		          
 		// Add the buttons and labels to the frame
 
+		buttonLayout.add(new JLabel("Manager Use Cases"));
 		buttonLayout.add(butTimeSheets);
 		buttonLayout.add(butServiceOrders);
+		buttonLayout.add(butManageNotes);
+		buttonLayout.add(new JLabel("Client Use Cases"));
+		buttonLayout.add(butTimeSheetsCWorker);
+		buttonLayout.add(new JLabel("Case Worker Use Cases"));
 		buttonLayout.add(butSubmitFeedback);
+
+
 
 		this.add(buttonLayout, BorderLayout.CENTER);
 	}
