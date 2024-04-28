@@ -1,138 +1,3 @@
-/*
-Name:	Matthew Tam and Simon Nasser
-Group:	2
-Class:	CS3560
-File:	RespiteCare.sql
-Description:
-	Initializes database called RespiteCare, preferably on 
-    local host. 
-*/
-
-DROP DATABASE IF EXISTS RespiteCare;
-
-CREATE DATABASE RespiteCare;
-USE RespiteCare;
-
-DROP USER IF EXISTS 'user'@'localhost';
-CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL ON respitecare.* TO 'user'@'localhost';
-
-CREATE TABLE Person (
-    ssn BIGINT,
-    firstName VARCHAR(50),
-    lastName VARCHAR(50),
-    phoneNumber VARCHAR(20),
-    emailAddress VARCHAR(320),
-    dateOfBirth DATE,
-    PRIMARY KEY (ssn)
-);
-
-CREATE TABLE Address (
-    addressID INT,
-    street VARCHAR(100),
-    city VARCHAR(50),
-    state VARCHAR(30),
-    postalCode INT,
-    country CHAR(2),
-    ssn BIGINT,
-    PRIMARY KEY(addressID)
-);
-
-CREATE TABLE Caregiver (
-    ssn BIGINT,
-    certification VARCHAR(100),
-    PRIMARY KEY (ssn)
-);
-
-CREATE TABLE Clients (
-    medicalNumber BIGINT,
-    ssn BIGINT,
-    emergencyContactNumber BIGINT,
-    PRIMARY KEY (medicalNumber)
-);
-
-CREATE TABLE Manager (
-    ssn BIGINT,
-    PRIMARY KEY(ssn)
-);
-
-CREATE TABLE Service (
-    serviceID INT PRIMARY KEY,
-    serviceType VARCHAR(50),
-    hourlyRate DECIMAL(5, 2)
-);
-    
-CREATE TABLE ServiceOrder (
-    authNumber INT,
-    medicalNumber BIGINT,
-    serviceID INT,
-    startDate DATE,
-    endDate DATE,
-    totalHoursAllowed INT,
-    caseWorkerName VARCHAR(50),
-    PRIMARY KEY (authNumber)
-);
-
-CREATE TABLE Note (
-    author BIGINT,
-    target BIGINT,
-    text VARCHAR(2048),
-    timea datetime,
-    PRIMARY KEY (timea , author)
-);
-
-CREATE TABLE Timesheet (
-	timesheetID INT,
-    authNumber INT,
-    ssn BIGINT,
-    startTime DATETIME,
-    endTime DATETIME,
-    PRIMARY KEY (timesheetID)
-);
-
-
-ALTER TABLE Address
-ADD FOREIGN KEY (ssn) REFERENCES Person(ssn);
-
-ALTER TABLE Clients
-ADD FOREIGN KEY (ssn) REFERENCES Person(ssn);
-
-ALTER TABLE Caregiver
-ADD FOREIGN KEY (ssn) REFERENCES Person(ssn);
-
-ALTER TABLE Manager
-ADD FOREIGN KEY (ssn) REFERENCES Person(ssn);
-
-ALTER TABLE Timesheet
-ADD FOREIGN KEY (ssn) REFERENCES Caregiver(ssn),
-ADD FOREIGN KEY (authNumber) REFERENCES  ServiceOrder(authNumber);
-
-ALTER TABLE Note
-ADD FOREIGN KEY (author) REFERENCES Person(ssn),
-ADD FOREIGN KEY (target) REFERENCES Person(ssn);
-
-ALTER TABLE ServiceOrder
-ADD FOREIGN KEY (medicalNumber)  REFERENCES Clients(medicalNumber),
-ADD FOREIGN KEY (serviceID) REFERENCES Service(serviceID);
-
-INSERT INTO Person VALUES
-('100000002', 'Hailey', 'Camacho', '402-946-4536', 'camacho3936@gmail.com', '1978-04-14'),
-('100000010', 'Lavelle', 'van Munster', '318-408-1056', 'lavelle_vanmunster1596@internetemails.net', '1968-03-25'),
-('100000029', 'Lindy', 'Turnbull', '704-071-5307', 'lindy_turnbull1382@ssl-mail.com', '1994-07-08'),
-('100000037', 'Jermaine', 'Swoll', '933-181-2535', 'jermaine3073@swift-mail.com', '1957-09-22'),
-('100000045', 'Anjelica', 'Hodge', '226-363-4120', 'hodge4319@ownmail.net', '1944-06-03'),
-('100000053', 'Numbers', 'Markus', '629-599-7458', 'numbers1181@fastemailer.com', '1995-05-31'),
-('100000061', 'Milan', 'Tanner', '889-590-5699', 'milan_tanner4004@fmguy.com', '1960-07-27'),
-('100000088', 'Ethan', 'Perez', '242-199-7373', 'perez5589@mailftp.com', '1992-06-28'),
-('100000096', 'Eleanora', 'Kirk', '665-404-6919', 'kirk6495@mailworks.org', '2003-03-18'),
-('100000118', 'Amado', 'Asselaer', '737-506-6770', 'asselaer3941@emailcorner.net', '1974-12-22'),
-('100000126', 'Don', 'Atkins', '303-329-0363', 'don_atkins4331@imap-mail.com', '1988-06-15'),
-('100000134', 'Lemuel', 'Ritter', '467-321-0378', 'lemuel9924@veryfast.biz', '1973-03-25'),
-('100000142', 'Benito', 'Hodge', '253-792-0362', 'benito388@speedpost.net', '1982-08-03'),
-('100000150', 'Sheba', 'Paul', '344-090-5983', 'paul4142@fastmail.com.au', '1950-09-03'),
-('100000169', 'Harrison', 'Boonzayer', '600-933-0873', 'harrison1075@theinternetemail.com', '1963-10-04'),
-('100000177', 'Pasquale', 'van der Helm', '872-952-7200', 'vanderhelm5114@xsmail.com', '1982-04-23');
-
 INSERT INTO Address VALUES
 ('0', '289 Lost Passage', 'Harker Heights', 'Nevada', '21613', 'US', '100000002'),
 ('1', '470 W Lodge Inlet', 'Popponesset Island', 'Nevada', '39116', 'US', '100000010'),
@@ -185,6 +50,24 @@ INSERT INTO Note VALUES
 ('100000045', '100000029', 'Client note about caregiver. Can only be seen by respective client and managers', '2024-01-01 00:00:05'),
 ('100000010', '100000053', 'Caregiver note on Client. Can only be seen by respective caregiver and managers', '2024-01-01 00:00:06');
 
+INSERT INTO Person VALUES
+('100000002', 'Hailey', 'Camacho', '402-946-4536', 'camacho3936@gmail.com', '1978-04-14'),
+('100000010', 'Lavelle', 'van Munster', '318-408-1056', 'lavelle_vanmunster1596@internetemails.net', '1968-03-25'),
+('100000029', 'Lindy', 'Turnbull', '704-071-5307', 'lindy_turnbull1382@ssl-mail.com', '1994-07-08'),
+('100000037', 'Jermaine', 'Swoll', '933-181-2535', 'jermaine3073@swift-mail.com', '1957-09-22'),
+('100000045', 'Anjelica', 'Hodge', '226-363-4120', 'hodge4319@ownmail.net', '1944-06-03'),
+('100000053', 'Numbers', 'Markus', '629-599-7458', 'numbers1181@fastemailer.com', '1995-05-31'),
+('100000061', 'Milan', 'Tanner', '889-590-5699', 'milan_tanner4004@fmguy.com', '1960-07-27'),
+('100000088', 'Ethan', 'Perez', '242-199-7373', 'perez5589@mailftp.com', '1992-06-28'),
+('100000096', 'Eleanora', 'Kirk', '665-404-6919', 'kirk6495@mailworks.org', '2003-03-18'),
+('100000118', 'Amado', 'Asselaer', '737-506-6770', 'asselaer3941@emailcorner.net', '1974-12-22'),
+('100000126', 'Don', 'Atkins', '303-329-0363', 'don_atkins4331@imap-mail.com', '1988-06-15'),
+('100000134', 'Lemuel', 'Ritter', '467-321-0378', 'lemuel9924@veryfast.biz', '1973-03-25'),
+('100000142', 'Benito', 'Hodge', '253-792-0362', 'benito388@speedpost.net', '1982-08-03'),
+('100000150', 'Sheba', 'Paul', '344-090-5983', 'paul4142@fastmail.com.au', '1950-09-03'),
+('100000169', 'Harrison', 'Boonzayer', '600-933-0873', 'harrison1075@theinternetemail.com', '1963-10-04'),
+('100000177', 'Pasquale', 'van der Helm', '872-952-7200', 'vanderhelm5114@xsmail.com', '1982-04-23');
+
 INSERT INTO Service VALUES
 ('6', 'Parents Choice', '25.5'),
 ('7', 'Regional Center Assigned', '28.0'),
@@ -209,6 +92,3 @@ INSERT INTO Timesheet VALUES
 ('11', '100109', '100000010', '2024-03-12 08:30:05', '2024-03-12 08:30:05'),
 ('12', '100109', '100000010', '2024-03-14 08:20:00', '2024-03-14 17:20:30');
 
-
-#Uncomment and run this command if needed.
-#DROP DATABASE respitecare;

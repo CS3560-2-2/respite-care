@@ -18,7 +18,7 @@ public class Connector{
 
     //mock user 
     private static String username = "user";
-    private static String password = "password";
+    private static String password = "";
     /**
      * Returns a connection to the database with full permissions.
      * Requires the JDBC driver to be in the classpath.
@@ -35,5 +35,42 @@ public class Connector{
         */
 
         return DriverManager.getConnection(url, username, password);
+    }
+    public static ResultSet getTable(String tableName) {
+        try (Connection conn = Connector.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName)) {
+            return rs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static void testPersonTable() {
+        try (Connection conn = Connector.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM Person")) {
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+    
+            // Print column names
+            for (int i = 1; i <= columnCount; i++) {
+                System.out.print(metaData.getColumnName(i) + "\t");
+            }
+            System.out.println();
+    
+            // Print data rows
+            while (rs.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    System.out.print(rs.getString(i) + "\t");
+                }
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void main(String[] args) {
+        testPersonTable();
     }
 }
