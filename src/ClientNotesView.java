@@ -1,7 +1,13 @@
+import View.ClientNotePreview;
+import View.ServiceOrderPreview;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ClientNotesView extends JPanel {
+
+    static int[] notes = {123456789, 158159,138597138, 3589725, 123456789, 158159,138597138, 3589725, 123456789, 158159};
+
 
     public ClientNotesView() {
         this.setLayout(new BorderLayout());
@@ -18,7 +24,14 @@ public class ClientNotesView extends JPanel {
         JPanel notesPanel = new JPanel();
         notesPanel.setLayout(new BoxLayout(notesPanel, BoxLayout.PAGE_AXIS));
 
-        //TODO: Code to add notes preview here
+        for(int i = 0; i < notes.length; i++) {
+            int finalI = i;
+            ClientNotePreview preview = new ClientNotePreview(
+                    notes[i],
+                    id -> {}
+            );
+            notesPanel.add(preview);
+        }
 
         this.add(new JScrollPane(notesPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 
