@@ -42,7 +42,7 @@ public class PortalWindow extends JPanel {
 		JButton butServiceOrders = new JButton("Manage Service Orders");
 		butServiceOrders.addActionListener(e -> {Main.setCurrentPanel(new ServiceOrderWindow());});
 		JButton butSubmitFeedback = new JButton("Submit Feedback");
-		butSubmitFeedback.addActionListener(e -> {}); // TODO: This does nothing as of now
+		butSubmitFeedback.addActionListener(e -> {Main.setCurrentPanel(new ClientNotesView());}); // TODO: This does nothing as of now
 		          
 		// Add the buttons and labels to the frame
 
