@@ -39,7 +39,10 @@ public class ClientNotesView extends JPanel {
 
         JPanel bottomPannel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton newEntryButton = new JButton("Create New Note");
-        newEntryButton.addActionListener(e -> {});
+        newEntryButton.addActionListener(e -> {
+            // TODO: Get ID of current client
+            Main.setCurrentPanel(new ClientNoteEditor(0));
+        });
         bottomPannel.add(newEntryButton);
         this.add(bottomPannel, BorderLayout.AFTER_LAST_LINE);
 
