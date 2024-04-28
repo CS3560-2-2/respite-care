@@ -1,5 +1,5 @@
 /**
- * Name:    Matthew Tam
+ * Name:    Matthew Tam & Simon Nasser
  * Group:   2
  * Created: 19 April 2024
  * File:    Connector.java
@@ -11,14 +11,17 @@
  */
 package lib;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Connector{
     //Expects the database to exist on localhost with the default port
     private static String url = "jdbc:mysql://localhost:3306/respitecare";
 
-    //mock user 
-    private static String username = "user";
-    private static String password = "";
+    private static String username = "admin";
+    private static String password = "%55%cP*Xq&hIDwjrF0@l";
     /**
      * Returns a connection to the database with full permissions.
      * Requires the JDBC driver to be in the classpath.
@@ -30,27 +33,63 @@ public class Connector{
             Class.forName("com.mysql.cj.jdbc.Driver");
         } 
         catch (ClassNotFoundException e){
-            throw new IllegalStateException("Driver not in classpath", e);
-        }
+            throw new IllegalStateException("Driver not in classpath", e); }
         */
-
         return DriverManager.getConnection(url, username, password);
     }
     public static ResultSet getTable(String tableName) {
         try (Connection conn = Connector.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName)) {
-            return rs;
+             Statement statement = conn.createStatement();
+             ResultSet sqlReturnObj = statement.executeQuery("SELECT * FROM " + tableName)) {
+            return sqlReturnObj;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
-    public static void testPersonTable() {
+    public static List<Map<String, Object>> getList(String tableName) {
+    List<Map<String, Object>> tableData = new ArrayList<>();
+
+    try (Connection conn = Connector.getConnection();
+         Statement statement = conn.createStatement();
+         ResultSet sqlReturnObj = statement.executeQuery("SELECT * FROM " + tableName)) {
+
+        ResultSetMetaData metaData = sqlReturnObj.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        while (sqlReturnObj.next()) {
+            Map<String, Object> row = new HashMap<>();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = metaData.getColumnName(i);
+                Object value = sqlReturnObj.getObject(i);
+                row.put(columnName, value);
+            }
+            tableData.add(row);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return tableData;
+}
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public static void testPesqlReturnObjonTable() {
         try (Connection conn = Connector.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM Person")) {
-            ResultSetMetaData metaData = rs.getMetaData();
+             Statement statement = conn.createStatement();
+             ResultSet sqlReturnObj = statement.executeQuery("SELECT * FROM PesqlReturnObjon")) {
+            ResultSetMetaData metaData = sqlReturnObj.getMetaData();
             int columnCount = metaData.getColumnCount();
     
             // Print column names
@@ -60,9 +99,9 @@ public class Connector{
             System.out.println();
     
             // Print data rows
-            while (rs.next()) {
+            while (sqlReturnObj.next()) {
                 for (int i = 1; i <= columnCount; i++) {
-                    System.out.print(rs.getString(i) + "\t");
+                    System.out.print(sqlReturnObj.getString(i) + "\t");
                 }
                 System.out.println();
             }
@@ -70,7 +109,17 @@ public class Connector{
             e.printStackTrace();
         }
     }
+    public static void testDictionaryGet() {
+        String tableName = "PesqlReturnObjon";
+        List<Map<String, Object>> pesqlReturnObjonData = getList(tableName);
+    
+        System.out.println("PesqlReturnObjon Table Contents:");
+        for (Map<String, Object> row : pesqlReturnObjonData) {
+            System.out.println(row);
+        }
+    }
     public static void main(String[] args) {
-        testPersonTable();
+        testPesqlReturnObjonTable();
+        testDictionaryGet();
     }
 }
