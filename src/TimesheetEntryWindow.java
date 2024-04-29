@@ -14,6 +14,7 @@ public class TimesheetEntryWindow extends JPanel {
     JTextField textStartTime;
     JTextField textEndTime;
     JComboBox<String> comboServiceOrder;
+    JComboBox<String> comboCaregivers;
 
     // Called when creating a new entry
     public TimesheetEntryWindow(long employeeID) {
@@ -38,6 +39,61 @@ public class TimesheetEntryWindow extends JPanel {
 
         JPanel entryDataPanel = new JPanel();
         entryDataPanel.setLayout(new BoxLayout(entryDataPanel, BoxLayout.PAGE_AXIS));
+
+		JPanel entryCaregiversPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel labCaregivers = new JLabel("Caregiver: ");
+        comboCaregivers = new JComboBox<>();
+        entryCaregiversPanel.add(labCaregivers);
+        entryCaregiversPanel.add(comboCaregivers);
+        entryDataPanel.add(entryCaregiversPanel);
+
+        List<Map<String, Object>> caregivers = Connector.customQuery(
+                "SELECT p.ssn, p.firstName, p.lastName " +
+                        "FROM Caregiver c " +
+                        "JOIN Person p ON c.ssn = p.ssn"
+        );
+        DefaultComboBoxModel<String> caregiversModel = new DefaultComboBoxModel<>();
+
+        // Populate the model with caregiver data
+        for (Map<String, Object> caregiver : caregivers) {
+            String ssn = caregiver.get("ssn").toString();
+            String firstName = caregiver.get("firstName").toString();
+            String lastName = caregiver.get("lastName").toString();
+
+            String displayText = firstName + " " + lastName + " (" + ssn + ")";
+            caregiversModel.addElement(displayText);
+        }
+
+        comboCaregivers.setModel(caregiversModel);
+
+		JPanel entryServiceOrderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel labServiceOrder = new JLabel("Service Order: ");
+        comboServiceOrder = new JComboBox<>();
+        entryServiceOrderPanel.add(labServiceOrder);
+        entryServiceOrderPanel.add(comboServiceOrder);
+        entryDataPanel.add(entryServiceOrderPanel);
+
+        List<Map<String, Object>> serviceOrders = Connector.customQuery(
+                "SELECT so.authNumber, s.serviceType, p.firstName, p.lastName " +
+                        "FROM ServiceOrder so " +
+                        "JOIN Service s ON so.serviceID = s.serviceID " +
+                        "JOIN Clients c ON so.medicalNumber = c.medicalNumber " +
+                        "JOIN Person p ON c.ssn = p.ssn"
+        );
+        DefaultComboBoxModel<String> serviceOrderModel = new DefaultComboBoxModel<>();
+
+        // Populate the model with service order data
+        for (Map<String, Object> serviceOrder : serviceOrders) {
+            String authNumber = serviceOrder.get("authNumber").toString();
+            String serviceType = serviceOrder.get("serviceType").toString();
+            String clientFirstName = serviceOrder.get("firstName").toString();
+            String clientLastName = serviceOrder.get("lastName").toString();
+
+            String displayText = authNumber + " - " + serviceType + " - " + clientFirstName + " " + clientLastName;
+            serviceOrderModel.addElement(displayText);
+        }
+
+        comboServiceOrder.setModel(serviceOrderModel);
 
         JPanel entryDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel labEntryDate = new JLabel("Entry Date: ");
@@ -67,61 +123,48 @@ public class TimesheetEntryWindow extends JPanel {
         entryEndPanel.add(textEndTime);
         entryDataPanel.add(entryEndPanel);
 
-        JPanel entryServiceOrderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel labServiceOrder = new JLabel("Service Order: ");
-        comboServiceOrder = new JComboBox<>();
-        entryServiceOrderPanel.add(labServiceOrder);
-        entryServiceOrderPanel.add(comboServiceOrder);
-        entryDataPanel.add(entryServiceOrderPanel);
-
-        List<Map<String, Object>> serviceOrders = Connector.customQuery(
-                "SELECT so.authNumber, s.serviceType, p.firstName, p.lastName " +
-                        "FROM ServiceOrder so " +
-                        "JOIN Service s ON so.serviceID = s.serviceID " +
-                        "JOIN Clients c ON so.medicalNumber = c.medicalNumber " +
-                        "JOIN Person p ON c.ssn = p.ssn"
-        );
-        DefaultComboBoxModel<String> serviceOrderModel = new DefaultComboBoxModel<>();
-
-        // Populate the model with service order data
-        for (Map<String, Object> serviceOrder : serviceOrders) {
-            String authNumber = serviceOrder.get("authNumber").toString();
-            String serviceType = serviceOrder.get("serviceType").toString();
-            String clientFirstName = serviceOrder.get("firstName").toString();
-            String clientLastName = serviceOrder.get("lastName").toString();
-
-            String displayText = authNumber + " - " + serviceType + " - " + clientFirstName + " " + clientLastName;
-            serviceOrderModel.addElement(displayText);
-        }
-
-        comboServiceOrder.setModel(serviceOrderModel);
-
         this.add(entryDataPanel, BorderLayout.CENTER);
 
-		if (entryID != -1) {
-			String[] startTime = ((LocalDateTime) existingEntryData.get("startTime")).toString().split("T");
-			String[] endTime = ((LocalDateTime) existingEntryData.get("endTime")).toString().split("T");
+        if (entryID != -1) {
+            String[] startTime = ((LocalDateTime) existingEntryData.get("startTime")).toString().split("T");
+            String[] endTime = ((LocalDateTime) existingEntryData.get("endTime")).toString().split("T");
 
-			textEntryDate.setText(startTime[0]);
-			textStartTime.setText(startTime[1]);
-			textEndTime.setText(endTime[1]);
+            textEntryDate.setText(startTime[0]);
+            textStartTime.setText(startTime[1]);
+            textEndTime.setText(endTime[1]);
 
-			// Find the index of the service order in the dropdown model
-			int authNumber = (int) existingEntryData.get("authNumber");
-			String selectedServiceOrder = null;
-			for (int i = 0; i < serviceOrderModel.getSize(); i++) {
-				String serviceOrder = serviceOrderModel.getElementAt(i);
-				if (serviceOrder.startsWith(String.valueOf(authNumber))) {
-					selectedServiceOrder = serviceOrder;
-					break;
-				}
-			}
+            // Find the index of the service order in the dropdown model
+            int authNumber = (int) existingEntryData.get("authNumber");
+            String selectedServiceOrder = null;
+            for (int i = 0; i < serviceOrderModel.getSize(); i++) {
+                String serviceOrder = serviceOrderModel.getElementAt(i);
+                if (serviceOrder.startsWith(String.valueOf(authNumber))) {
+                    selectedServiceOrder = serviceOrder;
+                    break;
+                }
+            }
 
-			// Set the selected service order in the dropdown
-			if (selectedServiceOrder != null) {
-				comboServiceOrder.setSelectedItem(selectedServiceOrder);
-			}
-		}
+            // Set the selected service order in the dropdown
+            if (selectedServiceOrder != null) {
+                comboServiceOrder.setSelectedItem(selectedServiceOrder);
+            }
+
+            // Find the index of the caregiver in the dropdown model
+            long caregiverSSN = (long) existingEntryData.get("ssn");
+            String selectedCaregiver = null;
+            for (int i = 0; i < caregiversModel.getSize(); i++) {
+                String caregiver = caregiversModel.getElementAt(i);
+                if (caregiver.endsWith("(" + caregiverSSN + ")")) {
+                    selectedCaregiver = caregiver;
+                    break;
+                }
+            }
+
+            // Set the selected caregiver in the dropdown
+            if (selectedCaregiver != null) {
+                comboCaregivers.setSelectedItem(selectedCaregiver);
+            }
+        }
 
         // Buttons
         JButton butUpdate = new JButton("Update Entry");
@@ -152,6 +195,10 @@ public class TimesheetEntryWindow extends JPanel {
         String[] parts = selectedServiceOrder.split(" - ");
         int serviceOrder = Integer.parseInt(parts[0]);
 
+        String selectedCaregiver = (String) comboCaregivers.getSelectedItem();
+        String[] caregiverParts = selectedCaregiver.split("\\(");
+        String caregiverSSN = caregiverParts[caregiverParts.length - 1].replace(")", "");
+
         // Format startTime and endTime into DATETIME format
         String formattedStartTime = entryDate + " " + startTime + ":00";
         String formattedEndTime = entryDate + " " + endTime + ":00";
@@ -160,7 +207,7 @@ public class TimesheetEntryWindow extends JPanel {
         updatedEntryData.put("startTime", formattedStartTime);
         updatedEntryData.put("endTime", formattedEndTime);
         updatedEntryData.put("authNumber", serviceOrder);
-        updatedEntryData.put("ssn", employeeID);
+        updatedEntryData.put("ssn", caregiverSSN);
 
         if (timesheetID == -1) {
             // Create a new timesheet entry
