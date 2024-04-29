@@ -3,8 +3,10 @@ import lib.MyConnector;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import javax.swing.*;
+import java.util.Random;
 
 public class TimesheetEntryWindow extends JPanel {
 	JTextField textEntryDate;
@@ -14,7 +16,7 @@ public class TimesheetEntryWindow extends JPanel {
 	JComboBox comboServiceOrder;
 	
 	// TODO: Get this data from somewhere else
-	Integer[] assignedServiceOrders = {1111, 1732, 1443};
+	Integer[] assignedServiceOrders = {100109, 1732, 1443};
 	String entryDate = "4/1/2024";
 	String startTime = "10:25AM";
 	String endTime = "4:45PM";
@@ -27,7 +29,7 @@ public class TimesheetEntryWindow extends JPanel {
 	}
 	
 	// Called when updating an existing entry
-	public TimesheetEntryWindow(long employeeID, long entryID) {
+	public TimesheetEntryWindow(long employeeID, int entryID) {
 
 		Map<String, Object> existingEntryData = Map.of();
 
@@ -52,7 +54,7 @@ public class TimesheetEntryWindow extends JPanel {
 		int month = currentDate.getMonthValue();
 		int day = currentDate.getDayOfMonth();
 		int year = currentDate.getYear();
-		textEntryDate = new JTextField(month + "/" + day + "/" + year);
+		textEntryDate = new JTextField(year + "-" + month + "-" + day);
 		textEntryDate.setMaximumSize(new Dimension(100, 40));
 		entryDatePanel.add(labEntryDate);
 		entryDatePanel.add(textEntryDate);
@@ -60,7 +62,7 @@ public class TimesheetEntryWindow extends JPanel {
 
 		JPanel entryStartPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel labStartTime = new JLabel("Start Time: ");
-		textStartTime = new JTextField("3:45pm");
+		textStartTime = new JTextField("3:45");
 		textStartTime.setColumns(8);
 		entryStartPanel.add(labStartTime);
 		entryStartPanel.add(textStartTime);
@@ -68,7 +70,7 @@ public class TimesheetEntryWindow extends JPanel {
 
 		JPanel entryEndPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel labEndTime = new JLabel("End Time: ");
-		textEndTime = new JTextField();
+		textEndTime = new JTextField("12:30");
 		textEndTime.setColumns(8);
 		entryEndPanel.add(labEndTime);
 		entryEndPanel.add(textEndTime);
@@ -111,7 +113,7 @@ public class TimesheetEntryWindow extends JPanel {
 		
 		// Buttons
 		JButton butUpdate = new JButton("Update Entry");
-		butUpdate.addActionListener(e -> {submitEntryInfo();});
+		butUpdate.addActionListener(e -> {submitEntryInfo(entryID, employeeID);});
 		JButton butDelete = new JButton("Delete Entry");
 		butDelete.addActionListener(e -> {deleteEntry(entryID);});
 		JButton butCancel = new JButton("Cancel");
@@ -135,7 +137,12 @@ public class TimesheetEntryWindow extends JPanel {
 
 	// Gather the data from the fields and submit them
 	// TODO: There's no form of error-checking here! For now we just hope the user plays nice.
-	private void submitEntryInfo() {
+	private void submitEntryInfo(int serviceOrderID, long employeeID) {
+		if(serviceOrderID == -1) {
+			Random rand = new Random();
+			serviceOrderID = rand.nextInt();
+		}
+
 		// TODO: Maybe use different data types for these values?
 		String entryDate = textEntryDate.getText();
 		String startTime = textStartTime.getText();
@@ -143,7 +150,15 @@ public class TimesheetEntryWindow extends JPanel {
 		// TODO: Refer to the database service orders here
 		int serviceOrder = assignedServiceOrders[comboServiceOrder.getSelectedIndex()];
 		String notes = textEntryDate.getText();
-		
+
+		MyConnector.insertIntoTable("Timesheet", List.of(
+				"" + serviceOrderID,
+				"" + serviceOrder,
+				"" + employeeID,
+				entryDate + " " + startTime + ":00",
+				entryDate + " " + endTime + ":00"
+		));
+
 		// TODO: Submit the new/updated info into the database somehow
 		System.out.println("Timesheet entry submitted!");
 		// Return to the timesheet panel

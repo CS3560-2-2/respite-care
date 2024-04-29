@@ -11,10 +11,7 @@
  */
 package lib;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MyConnector{
     //Expects the database to exist on localhost with the default port
@@ -79,7 +76,27 @@ public class MyConnector{
     connection = null;
     return tableData;
 }
-   
+
+    public static void insertIntoTable(String table, List<String> data) {
+
+        // Horrible evil string arithmetic
+        String qData = "(";
+        Iterator<String> dataStream = data.iterator();
+        qData = qData + "'" + dataStream.next() + "'";
+        while(dataStream.hasNext()) qData = qData + ", '" + dataStream.next() + "'";
+        qData = qData + ");";
+
+        try (Connection conn = MyConnector.getConnection()) {
+            Statement statement = conn.createStatement();
+            System.out.println("INSERT INTO " + table + " VALUES " + qData);
+            statement.executeUpdate("INSERT INTO " + table + " " + qData);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        connection = null;
+    }
     
     
     
