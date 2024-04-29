@@ -1,5 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import lib.MyConnector;
@@ -7,7 +11,7 @@ import lib.MyConnector.*;
 
 public class Main {
 
-	MyConnector.testSqlObjectReturnTable();
+	//MyConnector.testSqlObjectReturnTable();
 
 	public static JFrame frame;
 	public static Stack<JPanel> panelStack;
@@ -23,6 +27,15 @@ public class Main {
 		setCurrentPanel(new PortalWindow());
 
 		frame.setVisible(true);
+
+
+		List<Map<String, Object>> personTable = MyConnector.getList("Person");
+		for (Map<String, Object> person: personTable) {
+			System.out.print("-");
+			for (String key: person.keySet()) {
+				System.out.print(key + ":" + person.get(key) + "\n");
+			}
+		}
 	}
 	
 	// Switch to a new panel 

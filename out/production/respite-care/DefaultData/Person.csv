@@ -1,17 +1,17 @@
-ssn,firstName ,lastName ,dateOfBirth ,phoneNumber ,emailAddress 
-100000002,Hailey,Camacho,1978-04-14,402-946-4536,camacho3936@gmail.com
-100000010,Lavelle,van Munster,1968-03-25,318-408-1056,lavelle_vanmunster1596@internetemails.net
-100000029,Lindy,Turnbull,1994-07-08,704-071-5307,lindy_turnbull1382@ssl-mail.com
-100000037,Jermaine,Swoll,1957-09-22,933-181-2535,jermaine3073@swift-mail.com
-100000045,Anjelica,Hodge,1944-06-03,226-363-4120,hodge4319@ownmail.net
-100000053,Numbers,Markus,1995-05-31,629-599-7458,numbers1181@fastemailer.com
-100000061,Milan,Tanner,1960-07-27,889-590-5699,milan_tanner4004@fmguy.com
-100000088,Ethan,Perez,1992-06-28,242-199-7373,perez5589@mailftp.com
-100000096,Eleanora,Kirk,2003-03-18,665-404-6919,kirk6495@mailworks.org
-100000118,Amado,Asselaer,1974-12-22,737-506-6770,asselaer3941@emailcorner.net
-100000126,Don,Atkins,1988-06-15,303-329-0363,don_atkins4331@imap-mail.com
-100000134,Lemuel,Ritter,1973-03-25,467-321-0378,lemuel9924@veryfast.biz
-100000142,Benito,Hodge,1982-08-03,253-792-0362,benito388@speedpost.net
-100000150,Sheba,Paul,1950-09-03,344-090-5983,paul4142@fastmail.com.au
-100000169,Harrison,Boonzayer,1963-10-04,600-933-0873,harrison1075@theinternetemail.com
-100000177,Pasquale,van der Helm,1982-04-23,872-952-7200,vanderhelm5114@xsmail.com
+ssn,firstName ,lastName ,phoneNumber ,emailAddress ,dateOfBirth 
+100000002,Hailey,Camacho,402-946-4536,camacho3936@gmail.com,1978-04-14
+100000010,Lavelle,van Munster,318-408-1056,lavelle_vanmunster1596@internetemails.net,1968-03-25
+100000029,Lindy,Turnbull,704-071-5307,lindy_turnbull1382@ssl-mail.com,1994-07-08
+100000037,Jermaine,Swoll,933-181-2535,jermaine3073@swift-mail.com,1957-09-22
+100000045,Anjelica,Hodge,226-363-4120,hodge4319@ownmail.net,1944-06-03
+100000053,Numbers,Markus,629-599-7458,numbers1181@fastemailer.com,1995-05-31
+100000061,Milan,Tanner,889-590-5699,milan_tanner4004@fmguy.com,1960-07-27
+100000088,Ethan,Perez,242-199-7373,perez5589@mailftp.com,1992-06-28
+100000096,Eleanora,Kirk,665-404-6919,kirk6495@mailworks.org,2003-03-18
+100000118,Amado,Asselaer,737-506-6770,asselaer3941@emailcorner.net,1974-12-22
+100000126,Don,Atkins,303-329-0363,don_atkins4331@imap-mail.com,1988-06-15
+100000134,Lemuel,Ritter,467-321-0378,lemuel9924@veryfast.biz,1973-03-25
+100000142,Benito,Hodge,253-792-0362,benito388@speedpost.net,1982-08-03
+100000150,Sheba,Paul,344-090-5983,paul4142@fastmail.com.au,1950-09-03
+100000169,Harrison,Boonzayer,600-933-0873,harrison1075@theinternetemail.com,1963-10-04
+100000177,Pasquale,van der Helm,872-952-7200,vanderhelm5114@xsmail.com,1982-04-23

@@ -20,22 +20,28 @@ public class MyConnector{
     //Expects the database to exist on localhost with the default port
     private static String url = "jdbc:mysql://localhost:3306/respitecare";
 
-    private static String username = "admin";
-    private static String password = "%55%cP*Xq&hIDwjrF0@l";
+    private static String username = "user";
+    private static String password = "password";
+
+    private static Connection connection;
     /**
      * Returns a connection to the database with full permissions.
      * Requires the JDBC driver to be in the classpath.
      */
     public static Connection getConnection() throws SQLException{
         //If the driver does not automatically load, try the below.
-        /** 
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } 
-        catch (ClassNotFoundException e){
-            throw new IllegalStateException("Driver not in classpath", e); }
-        */
-        return DriverManager.getConnection(url, username, password);
+
+        if (connection == null) {
+            try{
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                connection = DriverManager.getConnection(url, username, password);
+            }
+            catch (ClassNotFoundException e){
+                throw new IllegalStateException("Driver not in classpath", e);
+            }
+
+        }
+        return connection;
     }
     public static ResultSet getTable(String tableName) {
         try (Connection conn = MyConnector.getConnection();
