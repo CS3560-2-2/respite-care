@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
-
+import lib.Connector;
 public class TimesheetWindow extends JPanel {
 	JPanel entryPanel;
 
@@ -69,11 +69,10 @@ public class TimesheetWindow extends JPanel {
 		List<Map<String, Object>> timetableEntries = List.of();
 
 		if (employeeID == -1) {
-			timetableEntries = MyConnector.getList("Timesheet");
+			timetableEntries = Connector.getList("Timesheet");
 		} else {
-			timetableEntries = MyConnector.getList("Timesheet WHERE ssn='" + employeeID + "'");
+			timetableEntries = Connector.customQuery("Timesheet WHERE ssn='" + employeeID + "'");
 		}
-
 		for (Map<String, Object> timetableEntry : timetableEntries) {
 			entryPanel.add(new TimesheetEntryPreview(
 					timetableEntry,

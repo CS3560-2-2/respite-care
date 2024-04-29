@@ -8,9 +8,7 @@ import java.util.Stack;
 import lib.Connector;
 
 public class Main {
-
-	MyConnector.testSqlObjectReturnTable();
-
+	// The main JFrame for the application
 	public static JFrame frame;
 	public static Stack<JPanel> panelStack;
 

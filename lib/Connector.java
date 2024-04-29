@@ -202,7 +202,39 @@ public static boolean deleteRow(String tableName, Map<String, Object> row) {
         return false;
     }
 }   
-    
+public static void printListMap(List<Map<String, Object>> list) {
+    for (Map<String, Object> row : list) {
+        System.out.println(row);
+    }
+}
+public static List<Map<String, Object>> customQuery(String query) {
+    List<Map<String, Object>> tableData = new ArrayList<>();
+
+    try (Connection conn = Connector.getConnection();
+         Statement statement = conn.createStatement();
+         ResultSet sqlReturnObj = statement.executeQuery(query)) {
+
+        ResultSetMetaData metaData = sqlReturnObj.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        while (sqlReturnObj.next()) {
+            Map<String, Object> row = new HashMap<>();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = metaData.getColumnName(i);
+                Object value = sqlReturnObj.getObject(i);
+                row.put(columnName, value);
+            }
+            tableData.add(row);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return tableData;
+}
+public static void printListMap(Map<String, Object> map) {
+    System.out.println(map);
+}
     
     
     

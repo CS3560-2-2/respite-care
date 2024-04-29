@@ -17,8 +17,8 @@ public class MyConnector{
     //Expects the database to exist on localhost with the default port
     private static String url = "jdbc:mysql://localhost:3306/respitecare";
 
-    private static String username = "user";
-    private static String password = "password";
+    private static String username = "admin";
+    private static String password = "%55%cP*Xq&hIDwjrF0@l";
 
     private static Connection connection;
     /**
