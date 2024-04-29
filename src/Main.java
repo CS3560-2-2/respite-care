@@ -22,7 +22,7 @@ public class Main {
 		frame.setMinimumSize(minDim);
 		panelStack = new Stack<JPanelBuilder>();
 		// Start up the GUI
-		setCurrentPanel(() -> new PortalWindow(args));
+		setCurrentPanel(() -> new PortalWindow(new String[]{"m"}));
 
 		frame.setVisible(true);
 	}
