@@ -235,8 +235,63 @@ public static List<Map<String, Object>> customQuery(String query) {
 public static void printListMap(Map<String, Object> map) {
     System.out.println(map);
 }
+// Using the custom query function, a function that takes in a table name and a dictionary
+// and returns all results from the table where the dictionary values match, as a list of dictionaries
+public static List<Map<String, Object>> getMatchingRows(String tableName, Map<String, Object> filters) {
+    StringBuilder queryBuilder = new StringBuilder("SELECT * FROM " + tableName + " WHERE ");
+    boolean firstCondition = true;
     
-    
+    // Build the WHERE clause conditions based on the filter dictionary
+    for (String columnName : filters.keySet()) {
+        if (!firstCondition) {
+            queryBuilder.append(" AND ");
+        }
+        queryBuilder.append(columnName).append(" = ?");
+        firstCondition = false;
+    }
+
+    String query = queryBuilder.toString();
+
+    // Create a List to store the query parameters
+    List<Object> queryParameters = new ArrayList<>(filters.values());
+
+    // Execute the custom query with the query string and parameters
+    return customQuery(query, queryParameters);
+}
+
+// Overload the customQuery method to accept query parameters
+public static List<Map<String, Object>> customQuery(String query, List<Object> parameters) {
+    List<Map<String, Object>> tableData = new ArrayList<>();
+
+    try (Connection conn = Connector.getConnection();
+         PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+
+        // Set the query parameters
+        for (int i = 0; i < parameters.size(); i++) {
+            preparedStatement.setObject(i + 1, parameters.get(i));
+        }
+
+        // Execute the query
+        ResultSet sqlReturnObj = preparedStatement.executeQuery();
+
+        ResultSetMetaData metaData = sqlReturnObj.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        while (sqlReturnObj.next()) {
+            Map<String, Object> row = new HashMap<>();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = metaData.getColumnName(i);
+                Object value = sqlReturnObj.getObject(i);
+                row.put(columnName, value);
+            }
+            tableData.add(row);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return tableData;
+}
     
     
     

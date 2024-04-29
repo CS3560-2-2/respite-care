@@ -15,7 +15,6 @@ public class TimesheetEntryPreview extends JPanel {
 
     public TimesheetEntryPreview(Map<String, Object> entryData, ActionListener editEvent, boolean editEnabled) {
         this.setLayout(new BorderLayout());
-        Connector.printListMap(entryData);
         //TODO: Get entry data from database
         JLabel previewLabel = new JLabel("<html>Name: " + getNameFromTimesheetEntry(entryData) + 
             " Timesheet ID: " + entryData.get("timesheetID") + "<br>" + entryData.get("startTime") + 
@@ -34,7 +33,6 @@ private String getNameFromTimesheetEntry(Map<String, Object> entryData) {
     String ssn = entryData.get("ssn").toString();
     // Get the ssn from the clients table
     Map<String, Object> personData = Connector.customQuery("SELECT * FROM Person WHERE ssn = '" + ssn + "'").get(0);
-    System.out.println(personData);
     return personData.get("firstName") + " " + personData.get("lastName");
     }
 }

@@ -1,8 +1,10 @@
+import lib.Connector;
 import lib.MyConnector;
 
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.*;
@@ -39,8 +41,11 @@ public class TimesheetEntryWindow extends JPanel {
 
 
 		this.setLayout(new BorderLayout());
-
-		JLabel labEmployee = new JLabel("Creating Timetable Entry For: " + employeeID);
+		Map<String, Object> employeeFilter = new HashMap<>();
+		employeeFilter.put("ssn", employeeID);
+		employeeFilter = Connector.getMatchingRows("Person", employeeFilter).get(0);
+		JLabel labEmployee = new JLabel("Creating Timetable Entry For: " + employeeFilter.get("firstName") + 
+		" " + employeeFilter.get("lastName"));
 		this.add(labEmployee, BorderLayout.BEFORE_FIRST_LINE);
 
 		JPanel entryDataPanel = new JPanel();
