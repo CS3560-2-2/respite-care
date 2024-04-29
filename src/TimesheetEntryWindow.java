@@ -25,22 +25,24 @@ public class TimesheetEntryWindow extends JPanel {
     public TimesheetEntryWindow(long employeeID, int entryID) {
         Map<String, Object> existingEntryData = Map.of();
 
-        if (entryID != -1) {
-            existingEntryData = MyConnector.getList("Timesheet WHERE timesheetID='" + entryID + "'").get(0);
-        }
-
         this.setLayout(new BorderLayout());
         Map<String, Object> employeeFilter = new HashMap<>();
         employeeFilter.put("ssn", employeeID);
-        employeeFilter = Connector.getMatchingRows("Person", employeeFilter).get(0);
-        JLabel labEmployee = new JLabel("Creating Timetable Entry For: " + employeeFilter.get("firstName") +
-                " " + employeeFilter.get("lastName"));
+        List<Map<String, Object>> employeeFilterList = Connector.getMatchingRows("Person", employeeFilter);
+		if (!employeeFilterList.isEmpty()) {
+			employeeFilter = employeeFilterList.get(0);
+		}
+		String employeeName = "";
+		if (!employeeFilterList.isEmpty()) {
+			employeeName = employeeFilter.get("firstName") + " " + employeeFilter.get("lastName");
+		}
+		JLabel labEmployee = new JLabel("Creating Timetable Entry For: " + employeeName);
         this.add(labEmployee, BorderLayout.BEFORE_FIRST_LINE);
 
         JPanel entryDataPanel = new JPanel();
         entryDataPanel.setLayout(new BoxLayout(entryDataPanel, BoxLayout.PAGE_AXIS));
 
-		JPanel entryCaregiversPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel entryCaregiversPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel labCaregivers = new JLabel("Caregiver: ");
         comboCaregivers = new JComboBox<>();
         entryCaregiversPanel.add(labCaregivers);
@@ -66,7 +68,7 @@ public class TimesheetEntryWindow extends JPanel {
 
         comboCaregivers.setModel(caregiversModel);
 
-		JPanel entryServiceOrderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel entryServiceOrderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel labServiceOrder = new JLabel("Service Order: ");
         comboServiceOrder = new JComboBox<>();
         entryServiceOrderPanel.add(labServiceOrder);
@@ -97,11 +99,7 @@ public class TimesheetEntryWindow extends JPanel {
 
         JPanel entryDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel labEntryDate = new JLabel("Entry Date: ");
-        LocalDate currentDate = java.time.LocalDate.now();
-        int month = currentDate.getMonthValue();
-        int day = currentDate.getDayOfMonth();
-        int year = currentDate.getYear();
-        textEntryDate = new JTextField(year + "-" + month + "-" + day);
+        textEntryDate = new JTextField();
         textEntryDate.setMaximumSize(new Dimension(100, 40));
         entryDatePanel.add(labEntryDate);
         entryDatePanel.add(textEntryDate);
@@ -109,7 +107,7 @@ public class TimesheetEntryWindow extends JPanel {
 
         JPanel entryStartPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel labStartTime = new JLabel("Start Time: ");
-        textStartTime = new JTextField("3:45");
+        textStartTime = new JTextField();
         textStartTime.setColumns(8);
         entryStartPanel.add(labStartTime);
         entryStartPanel.add(textStartTime);
@@ -117,7 +115,7 @@ public class TimesheetEntryWindow extends JPanel {
 
         JPanel entryEndPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel labEndTime = new JLabel("End Time: ");
-        textEndTime = new JTextField("12:30");
+        textEndTime = new JTextField();
         textEndTime.setColumns(8);
         entryEndPanel.add(labEndTime);
         entryEndPanel.add(textEndTime);
@@ -125,7 +123,18 @@ public class TimesheetEntryWindow extends JPanel {
 
         this.add(entryDataPanel, BorderLayout.CENTER);
 
-        if (entryID != -1) {
+        if (entryID == -1) {
+            // Set default values for a new entry
+            LocalDate currentDate = java.time.LocalDate.now();
+            int month = currentDate.getMonthValue();
+            int day = currentDate.getDayOfMonth();
+            int year = currentDate.getYear();
+            textEntryDate.setText(year + "-" + month + "-" + day);
+            textStartTime.setText("08:00");
+            textEndTime.setText("17:00");
+        } else {
+            existingEntryData = MyConnector.getList("Timesheet WHERE timesheetID='" + entryID + "'").get(0);
+
             String[] startTime = ((LocalDateTime) existingEntryData.get("startTime")).toString().split("T");
             String[] endTime = ((LocalDateTime) existingEntryData.get("endTime")).toString().split("T");
 
@@ -210,6 +219,10 @@ public class TimesheetEntryWindow extends JPanel {
         updatedEntryData.put("ssn", caregiverSSN);
 
         if (timesheetID == -1) {
+            // Generate a new timesheetID
+            int newTimesheetID = generateNewTimesheetID();;
+            updatedEntryData.put("timesheetID", newTimesheetID);
+        
             // Create a new timesheet entry
             Connector.insertRow("Timesheet", updatedEntryData);
         } else {
@@ -221,6 +234,18 @@ public class TimesheetEntryWindow extends JPanel {
 
         System.out.println("Timesheet entry submitted!");
         Main.previousPanel();
+    }
+
+    private int generateNewTimesheetID() {
+        List<Map<String, Object>> timesheets = Connector.getList("Timesheet");
+        int maxTimesheetID = 0;
+        for (Map<String, Object> timesheet : timesheets) {
+            int currentTimesheetID = (int) timesheet.get("timesheetID");
+            if (currentTimesheetID > maxTimesheetID) {
+                maxTimesheetID = currentTimesheetID;
+            }
+        }
+        return maxTimesheetID + 1;
     }
 
     // Remove a timesheet entry from the database
