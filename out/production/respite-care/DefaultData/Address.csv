@@ -1,21 +1,21 @@
-addressID ,ssn ,street ,postalCode,city,state,Country
-0,100000002,289 Lost Passage,21613,Harker Heights,Nevada,US
-1,100000010,470 W Lodge Inlet,39116,Popponesset Island,Nevada,US
-2,100000029,127 Blue Robin,5923,Orient,Louisiana,US
-3,100000029,517 Burning Lake Bay,40165,Pompano Beach,Georgia,US
-4,100000037,P.O. Box 95799,78389,Matawan borough,Nebraska,US
-5,100000045,481 Sunny Nectar Divide,25890,Sky Lake,Virginia,US
-6,100000045,P.O. Box 98424,56950,Kentland,Oregon,US
-7,100000053,588 Tawny Trafficway,98084,Waller,North Dakota,US
-8,100000061,965 Foggy Rise Plaza,1250,Rich Creek,Hawaii,US
-9,100000061,61 Cedar Glade,7422,Gauley Bridge,Florida,US
-10,100000088,229 Iron Perkins Dell,78823,Bagnell,Wyoming,US
-11,100000096,970 Green Overpass,24199,Junction,Alabama,US
-12,100000118,666 Fallen Heights,51381,North Wildwood,Minnesota,US
-13,100000126,485 Stream Edge,81874,Bremen village,Wisconsin,US
-14,100000126,128 Silent Main,81636,Kent,Delaware,US
-15,100000134,P.O. Box 46518,84058,Hailey,North Carolina,US
-16,100000142,P.O. Box 36831,39195,Hernando Beach,Minnesota,US
-17,100000150,558 Broad Meadow,403,Marcellus village,Tennessee,US
-18,100000169,508 Honey View Isle,23722,Pemberville village,Georgia,US
-19,100000177,P.O. Box 65136,93551,Malin,Arizona,US
+addressID ,street ,city,state,postalCode,Country,ssn 
+0,289 Lost Passage,Harker Heights,Nevada,21613,US,100000002
+1,470 W Lodge Inlet,Popponesset Island,Nevada,39116,US,100000010
+2,127 Blue Robin,Orient,Louisiana,5923,US,100000029
+3,517 Burning Lake Bay,Pompano Beach,Georgia,40165,US,100000029
+4,P.O. Box 95799,Matawan borough,Nebraska,78389,US,100000037
+5,481 Sunny Nectar Divide,Sky Lake,Virginia,25890,US,100000045
+6,P.O. Box 98424,Kentland,Oregon,56950,US,100000045
+7,588 Tawny Trafficway,Waller,North Dakota,98084,US,100000053
+8,965 Foggy Rise Plaza,Rich Creek,Hawaii,1250,US,100000061
+9,61 Cedar Glade,Gauley Bridge,Florida,7422,US,100000061
+10,229 Iron Perkins Dell,Bagnell,Wyoming,78823,US,100000088
+11,970 Green Overpass,Junction,Alabama,24199,US,100000096
+12,666 Fallen Heights,North Wildwood,Minnesota,51381,US,100000118
+13,485 Stream Edge,Bremen village,Wisconsin,81874,US,100000126
+14,128 Silent Main,Kent,Delaware,81636,US,100000126
+15,P.O. Box 46518,Hailey,North Carolina,84058,US,100000134
+16,P.O. Box 36831,Hernando Beach,Minnesota,39195,US,100000142
+17,558 Broad Meadow,Marcellus village,Tennessee,403,US,100000150
+18,508 Honey View Isle,Pemberville village,Georgia,23722,US,100000169
+19,P.O. Box 65136,Malin,Arizona,93551,US,100000177

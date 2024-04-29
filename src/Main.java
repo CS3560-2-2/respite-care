@@ -1,9 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import lib.Connector;
 
 public class Main {
+
+	MyConnector.testSqlObjectReturnTable();
 
 	public static JFrame frame;
 	public static Stack<JPanel> panelStack;
