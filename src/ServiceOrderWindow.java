@@ -1,11 +1,12 @@
 import View.ServiceOrderPreview;
+import lib.Connector;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.Map;
 
 public class ServiceOrderWindow extends JPanel {
-
-    static int[] serviceOrders = {123456789, 158159,138597138, 3589725, 123456789, 158159,138597138, 3589725, 123456789, 158159};
 
     public ServiceOrderWindow() {
         this.setLayout(new BorderLayout());
@@ -26,10 +27,10 @@ public class ServiceOrderWindow extends JPanel {
         JPanel serviceOrderPane = new JPanel();
         serviceOrderPane.setLayout(new BoxLayout(serviceOrderPane, BoxLayout.PAGE_AXIS));
 
-        for(int i = 0; i < serviceOrders.length; i++) {
-            int finalI = i;
+        List<Map<String, Object>> serviceOrders = Connector.getList("ServiceOrder");
+        for (Map<String, Object> serviceOrder : serviceOrders) {
             ServiceOrderPreview preview = new ServiceOrderPreview(
-                    serviceOrders[i],
+                    serviceOrder,
                     id -> viewServiceOrder(id)
             );
             serviceOrderPane.add(preview);

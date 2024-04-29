@@ -325,12 +325,12 @@ public static List<Map<String, Object>> customQuery(String query, List<Object> p
         }
     }
     public static void testDictionaryGet() {
-        String tableName = "Person";
+        String tableName = "ServiceOrder";
         List<Map<String, Object>> Person = getList(tableName);
     
-        System.out.println("Person Table Contents:");
+        System.out.println("ServiceOrder Table Contents:");
         for (Map<String, Object> row : Person) {
-            System.out.println(row);
+            System.out.print(row);
         }
     }
     public static void testInsertManager() {
