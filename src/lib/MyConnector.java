@@ -76,6 +76,7 @@ public class MyConnector{
         e.printStackTrace();
     }
 
+    connection = null;
     return tableData;
 }
    

@@ -18,16 +18,16 @@ public class TimesheetEntryWindow extends JPanel {
 	String notes = "Very needy on Mondays...";
 	
 	// Called when creating a new entry
-	public TimesheetEntryWindow(String employeeName) {
-		this(employeeName, -1);
+	public TimesheetEntryWindow(int employeeID) {
+		this(employeeID, -1);
 	}
 	
 	// Called when updating an existing entry
-	public TimesheetEntryWindow(String employeeName, int entryID) {
+	public TimesheetEntryWindow(int employeeID, int entryID) {
 
 		this.setLayout(new BorderLayout());
 
-		JLabel labEmployee = new JLabel("Creating Timetable Entry For: " + employeeName);
+		JLabel labEmployee = new JLabel("Creating Timetable Entry For: " + employeeID);
 		this.add(labEmployee, BorderLayout.BEFORE_FIRST_LINE);
 
 		JPanel entryDataPanel = new JPanel();

@@ -27,15 +27,6 @@ public class Main {
 		setCurrentPanel(new PortalWindow());
 
 		frame.setVisible(true);
-
-
-		List<Map<String, Object>> personTable = MyConnector.getList("Person");
-		for (Map<String, Object> person: personTable) {
-			System.out.print("-");
-			for (String key: person.keySet()) {
-				System.out.print(key + ":" + person.get(key) + "\n");
-			}
-		}
 	}
 	
 	// Switch to a new panel 
