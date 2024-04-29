@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.Stack;
+import lib.Connector;
 
 public class Main {
 
@@ -8,6 +9,7 @@ public class Main {
 	public static Stack<JPanel> panelStack;
 
 	public static void main(String[] args) {
+		Connector.testDictionaryGet();
 		frame = new JFrame("Respite Management Portal");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension minDim = new Dimension();

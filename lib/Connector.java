@@ -85,10 +85,10 @@ public class Connector{
     
     
     
-    public static void testPesqlReturnObjonTable() {
+    public static void testBasicSql() {
         try (Connection conn = Connector.getConnection();
              Statement statement = conn.createStatement();
-             ResultSet sqlReturnObj = statement.executeQuery("SELECT * FROM PesqlReturnObjon")) {
+             ResultSet sqlReturnObj = statement.executeQuery("SELECT * FROM Person")) {
             ResultSetMetaData metaData = sqlReturnObj.getMetaData();
             int columnCount = metaData.getColumnCount();
     
@@ -110,16 +110,16 @@ public class Connector{
         }
     }
     public static void testDictionaryGet() {
-        String tableName = "PesqlReturnObjon";
-        List<Map<String, Object>> pesqlReturnObjonData = getList(tableName);
+        String tableName = "Person";
+        List<Map<String, Object>> Person = getList(tableName);
     
-        System.out.println("PesqlReturnObjon Table Contents:");
-        for (Map<String, Object> row : pesqlReturnObjonData) {
+        System.out.println("Person Table Contents:");
+        for (Map<String, Object> row : Person) {
             System.out.println(row);
         }
     }
     public static void main(String[] args) {
-        testPesqlReturnObjonTable();
+        testBasicSql();
         testDictionaryGet();
     }
 }
