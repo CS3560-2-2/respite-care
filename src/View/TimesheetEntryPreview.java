@@ -17,8 +17,9 @@ public class TimesheetEntryPreview extends JPanel {
         this.setLayout(new BorderLayout());
         Connector.printListMap(entryData);
         //TODO: Get entry data from database
-        JLabel previewLabel = new JLabel("<html>Name: " + getNameFromTimesheetEntry(entryData) + " Timesheet ID: " + entryData.get("timesheetID")
-                + "<br>" + entryData.get("startTime") + " - " + entryData.get("endTime"));
+        JLabel previewLabel = new JLabel("<html>Name: " + getNameFromTimesheetEntry(entryData) + 
+            " Timesheet ID: " + entryData.get("timesheetID") + "<br>" + entryData.get("startTime") + 
+            " - " + entryData.get("endTime"));
         this.add(previewLabel, BorderLayout.LINE_START);
 
         JButton editButton = new JButton("Edit");
