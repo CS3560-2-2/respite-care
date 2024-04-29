@@ -72,7 +72,55 @@ public class Connector{
 
     return tableData;
 }
-   
+
+public static boolean insertRow(String tableName, Map<String, Object> row) {
+    try (Connection conn = Connector.getConnection();
+         Statement statement = conn.createStatement()) {
+
+        // Generate private key if empty
+        if (row.containsKey("private_key") && (row.get("private_key") == null) || row.get("private_key") == "") {
+            ResultSet maxKeyResult = statement.executeQuery("SELECT MAX(private_key) FROM " + tableName);
+            int maxKey = 0;
+            if (maxKeyResult.next()) {
+                maxKey = maxKeyResult.getInt(1);
+            }
+            row.put("private_key", maxKey + 1);
+        }
+
+        // Build the SQL query
+        StringBuilder queryBuilder = new StringBuilder("INSERT INTO " + tableName + " (");
+        StringBuilder valuesBuilder = new StringBuilder("VALUES (");
+
+        for (String columnName : row.keySet()) {
+            queryBuilder.append(columnName).append(", ");
+            valuesBuilder.append("?, ");
+        }
+
+        // Remove the trailing comma and space
+        queryBuilder.setLength(queryBuilder.length() - 2);
+        valuesBuilder.setLength(valuesBuilder.length() - 2);
+
+        queryBuilder.append(") ");
+        valuesBuilder.append(")");
+
+        String query = queryBuilder.toString() + valuesBuilder.toString();
+
+        // Prepare the statement and set the parameter values
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        int parameterIndex = 1;
+        for (Object value : row.values()) {
+            preparedStatement.setObject(parameterIndex++, value);
+        }
+
+        // Execute the insert query
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
     
     
     
@@ -118,8 +166,42 @@ public class Connector{
             System.out.println(row);
         }
     }
+    public static void testInsertManager() {
+        String tableName = "Manager";
+    
+        // Create a dictionary (Map) representing the row to be inserted
+        Map<String, Object> managerRow = new HashMap<>();
+        managerRow.put("ssn", "100000177");
+    
+        // Call the insertRow function
+        boolean insertSuccessful = insertRow(tableName, managerRow);
+    
+        if (insertSuccessful) {
+            System.out.println("Manager row inserted successfully.");
+        } else {
+            System.out.println("Failed to insert Manager row.");
+        }
+    }
+    public static void testInsertPerson() {
+        String tableName = "Person";
+    
+        // Create a dictionary (Map) representing the row to be inserted
+        Map<String, Object> personRow = new HashMap<>();
+        personRow.put("ssn", "");
+    
+        // Call the insertRow function
+        boolean insertSuccessful = insertRow(tableName, personRow);
+    
+        if (insertSuccessful) {
+            System.out.println("Empty person row inserted successfully.");
+        } else {
+            System.out.println("Failed to insert Person row.");
+        }
+    }
     public static void main(String[] args) {
         testBasicSql();
         testDictionaryGet();
+        testInsertManager();
+        testInsertPerson();
     }
 }
