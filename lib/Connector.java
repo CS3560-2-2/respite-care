@@ -72,47 +72,93 @@ public class Connector{
 
     return tableData;
 }
-
 public static boolean insertRow(String tableName, Map<String, Object> row) {
     try (Connection conn = Connector.getConnection();
          Statement statement = conn.createStatement()) {
-
-        // Generate private key if empty
-        if (row.containsKey("private_key") && (row.get("private_key") == null) || row.get("private_key") == "") {
-            ResultSet maxKeyResult = statement.executeQuery("SELECT MAX(private_key) FROM " + tableName);
-            int maxKey = 0;
-            if (maxKeyResult.next()) {
-                maxKey = maxKeyResult.getInt(1);
-            }
-            row.put("private_key", maxKey + 1);
-        }
-
+        
         // Build the SQL query
         StringBuilder queryBuilder = new StringBuilder("INSERT INTO " + tableName + " (");
         StringBuilder valuesBuilder = new StringBuilder("VALUES (");
-
+        
         for (String columnName : row.keySet()) {
             queryBuilder.append(columnName).append(", ");
             valuesBuilder.append("?, ");
         }
-
+        
         // Remove the trailing comma and space
         queryBuilder.setLength(queryBuilder.length() - 2);
         valuesBuilder.setLength(valuesBuilder.length() - 2);
-
+        
         queryBuilder.append(") ");
         valuesBuilder.append(")");
-
+        
         String query = queryBuilder.toString() + valuesBuilder.toString();
-
+        
         // Prepare the statement and set the parameter values
-        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         int parameterIndex = 1;
         for (Object value : row.values()) {
             preparedStatement.setObject(parameterIndex++, value);
         }
-
+        
         // Execute the insert query
+        int rowsAffected = preparedStatement.executeUpdate();
+        // Retrieve the generated private key
+        ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+        if (generatedKeys.next()) {
+            int generatedPrivateKey = generatedKeys.getInt(1);
+            System.out.println("Generated Private Key: " + generatedPrivateKey);
+        }
+        
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+
+public static boolean updateRow(String tableName, Map<String, Object> oldRow, Map<String, Object> newRow) {
+    try (Connection conn = Connector.getConnection();
+         Statement statement = conn.createStatement()) {
+
+        // Build the SQL query
+        StringBuilder queryBuilder = new StringBuilder("UPDATE " + tableName + " SET ");
+
+        for (String columnName : newRow.keySet()) {
+            queryBuilder.append(columnName).append(" = ?, ");
+        }
+
+        // Remove the trailing comma and space
+        queryBuilder.setLength(queryBuilder.length() - 2);
+
+        // Add the WHERE clause based on the old row values
+        queryBuilder.append(" WHERE ");
+
+        boolean firstCondition = true;
+        for (String columnName : oldRow.keySet()) {
+            if (!firstCondition) {
+                queryBuilder.append(" AND ");
+            }
+            queryBuilder.append(columnName).append(" = ?");
+            firstCondition = false;
+        }
+
+        String query = queryBuilder.toString();
+
+        // Prepare the statement and set the parameter values
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+
+        int parameterIndex = 1;
+        for (Object value : newRow.values()) {
+            preparedStatement.setObject(parameterIndex++, value);
+        }
+
+        for (Object value : oldRow.values()) {
+            preparedStatement.setObject(parameterIndex++, value);
+        }
+
+        // Execute the update query
         int rowsAffected = preparedStatement.executeUpdate();
 
         return rowsAffected > 0;
@@ -121,7 +167,41 @@ public static boolean insertRow(String tableName, Map<String, Object> row) {
         return false;
     }
 }
-    
+public static boolean deleteRow(String tableName, Map<String, Object> row) {
+    try (Connection conn = Connector.getConnection();
+         Statement statement = conn.createStatement()) {
+
+        // Build the SQL query
+        StringBuilder queryBuilder = new StringBuilder("DELETE FROM " + tableName + " WHERE ");
+
+        boolean firstCondition = true;
+        for (String columnName : row.keySet()) {
+            if (!firstCondition) {
+                queryBuilder.append(" AND ");
+            }
+            queryBuilder.append(columnName).append(" = ?");
+            firstCondition = false;
+        }
+
+        String query = queryBuilder.toString();
+
+        // Prepare the statement and set the parameter values
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+
+        int parameterIndex = 1;
+        for (Object value : row.values()) {
+            preparedStatement.setObject(parameterIndex++, value);
+        }
+
+        // Execute the delete query
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}   
     
     
     
@@ -171,7 +251,7 @@ public static boolean insertRow(String tableName, Map<String, Object> row) {
     
         // Create a dictionary (Map) representing the row to be inserted
         Map<String, Object> managerRow = new HashMap<>();
-        managerRow.put("ssn", "100000177");
+        // managerRow.put("ssn", "100000177");
     
         // Call the insertRow function
         boolean insertSuccessful = insertRow(tableName, managerRow);
@@ -187,8 +267,13 @@ public static boolean insertRow(String tableName, Map<String, Object> row) {
     
         // Create a dictionary (Map) representing the row to be inserted
         Map<String, Object> personRow = new HashMap<>();
-        personRow.put("ssn", "");
-    
+        personRow.put("ssn", "101");
+        personRow.put("firstName", "Hailey");
+        personRow.put("lastName", "Camacho");
+        personRow.put("phoneNumber", "402-946-4536");
+        personRow.put("emailAddress", "camacho3936@gmail.com");
+        personRow.put("dateOfBirth", "1978-04-14");
+
         // Call the insertRow function
         boolean insertSuccessful = insertRow(tableName, personRow);
     
@@ -198,10 +283,58 @@ public static boolean insertRow(String tableName, Map<String, Object> row) {
             System.out.println("Failed to insert Person row.");
         }
     }
+    public static void testUpdatePerson() {
+        String tableName = "Person";
+    
+        // Create a dictionary (Map) representing the existing row to be updated
+        Map<String, Object> oldPersonRow = new HashMap<>();
+        oldPersonRow.put("ssn", "101");
+        oldPersonRow.put("firstName", "Hailey");
+        oldPersonRow.put("lastName", "Camacho");
+        oldPersonRow.put("phoneNumber", "402-946-4536");
+        oldPersonRow.put("emailAddress", "camacho3936@gmail.com");
+        oldPersonRow.put("dateOfBirth", "1978-04-14");
+    
+        // Create a dictionary (Map) representing the updated values for the row
+        Map<String, Object> newPersonRow = new HashMap<>();
+        newPersonRow.put("emailAddress", "cnewmeil3936@gmail.com");
+    
+        // Call the updateRow function
+        boolean updateSuccessful = updateRow(tableName, oldPersonRow, newPersonRow);
+    
+        if (updateSuccessful) {
+            System.out.println("Person row updated successfully.");
+        } else {
+            System.out.println("Failed to update Person row.");
+        }
+    }
+
+    public static void testDeletePerson() {
+        String tableName = "Person";
+    
+        // Create a dictionary (Map) representing the row to be deleted
+        Map<String, Object> oldPersonRow = new HashMap<>();
+        oldPersonRow.put("ssn", "101");
+        oldPersonRow.put("firstName", "Hailey");
+        oldPersonRow.put("lastName", "Camacho");
+        oldPersonRow.put("phoneNumber", "402-946-4536");
+        oldPersonRow.put("emailAddress", "cnewmeil3936@gmail.com");
+        oldPersonRow.put("dateOfBirth", "1978-04-14");
+    
+        // Call the deleteRow function
+        boolean deleteSuccessful = deleteRow(tableName, oldPersonRow);
+    
+        if (deleteSuccessful) {
+            System.out.println("Person row deleted successfully.");
+        } else {
+            System.out.println("Failed to delete Person row.");
+        }
+    }
     public static void main(String[] args) {
         testBasicSql();
         testDictionaryGet();
-        testInsertManager();
         testInsertPerson();
+        testUpdatePerson();
+        testDeletePerson();
     }
 }
