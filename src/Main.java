@@ -48,8 +48,10 @@ public class Main {
 			frame.remove(panelStack.pop());
 		}
 		// Switch to the panel directly before it
+		panelStack.peek().repaint();
 		frame.add(panelStack.peek());
 		frame.validate();
 		frame.repaint();
+		frame.setVisible(true);
 	}
 }

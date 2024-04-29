@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.List;
 
 public class CaseworkerManagementWindow extends JPanel {
+
+    JPanel pageContentPanel;
     public CaseworkerManagementWindow() {
         this.setLayout(new BorderLayout());
 
@@ -25,7 +27,7 @@ public class CaseworkerManagementWindow extends JPanel {
         topInfoLayout.add(butBack);
 
 
-        JPanel pageContentPanel = new JPanel();
+        pageContentPanel = new JPanel();
         pageContentPanel.setLayout(new BoxLayout(pageContentPanel, BoxLayout.PAGE_AXIS));
 
 
@@ -45,5 +47,23 @@ public class CaseworkerManagementWindow extends JPanel {
         this.add(topInfoLayout, BorderLayout.BEFORE_FIRST_LINE);
         this.add(new JScrollPane(pageContentPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 
+    }
+
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        pageContentPanel.removeAll();
+        List<Map<String, Object>> caregivers = Connector.getList("Caregiver");
+
+        for(Map<String, Object> caregiver : caregivers) {
+            pageContentPanel.add(new CaseworkerPreview(
+                    caregiver,
+                    e -> {
+                        Main.setCurrentPanel(new CaseworkerEditorWindow((long)caregiver.get("ssn")));
+                    },
+                    true
+            ));
+        }
     }
 }
