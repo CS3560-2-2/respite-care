@@ -2,12 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Stack;
 
-import lib.MyConnector;
-import lib.MyConnector.*;
-
 public class Main {
-
-	MyConnector.testSqlObjectReturnTable();
 
 	public static JFrame frame;
 	public static Stack<JPanel> panelStack;
