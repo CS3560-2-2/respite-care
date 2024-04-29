@@ -2,9 +2,9 @@
  * Name:    Matthew Tam & Simon Nasser
  * Group:   2
  * Created: 19 April 2024
- * File:    Connector.java
+ * File:    MyConnector.java
  * Description:
- *  A class called Connector to be used to
+ *  A class called MyConnector to be used to
  *  get a connection with full permissions to the
  *  database. To be used for the Group Project. 
  *  Uses a mock user that was added to the database.
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Connector{
+public class MyConnector{
     //Expects the database to exist on localhost with the default port
     private static String url = "jdbc:mysql://localhost:3306/respitecare";
 
@@ -38,7 +38,7 @@ public class Connector{
         return DriverManager.getConnection(url, username, password);
     }
     public static ResultSet getTable(String tableName) {
-        try (Connection conn = Connector.getConnection();
+        try (Connection conn = MyConnector.getConnection();
              Statement statement = conn.createStatement();
              ResultSet sqlReturnObj = statement.executeQuery("SELECT * FROM " + tableName)) {
             return sqlReturnObj;
@@ -50,7 +50,7 @@ public class Connector{
     public static List<Map<String, Object>> getList(String tableName) {
     List<Map<String, Object>> tableData = new ArrayList<>();
 
-    try (Connection conn = Connector.getConnection();
+    try (Connection conn = MyConnector.getConnection();
          Statement statement = conn.createStatement();
          ResultSet sqlReturnObj = statement.executeQuery("SELECT * FROM " + tableName)) {
 
@@ -85,8 +85,8 @@ public class Connector{
     
     
     
-    public static void testPesqlReturnObjonTable() {
-        try (Connection conn = Connector.getConnection();
+    public static void testSqlObjectReturnTable() {
+        try (Connection conn = MyConnector.getConnection();
              Statement statement = conn.createStatement();
              ResultSet sqlReturnObj = statement.executeQuery("SELECT * FROM PesqlReturnObjon")) {
             ResultSetMetaData metaData = sqlReturnObj.getMetaData();
@@ -119,7 +119,7 @@ public class Connector{
         }
     }
     public static void main(String[] args) {
-        testPesqlReturnObjonTable();
+        testSqlObjectReturnTable();
         testDictionaryGet();
     }
 }
