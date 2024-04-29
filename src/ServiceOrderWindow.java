@@ -40,10 +40,10 @@ public class ServiceOrderWindow extends JPanel {
     }
 
     public static void createServiceOrder() {
-        Main.setCurrentPanel(new EditServiceOrderWindow(-1));
+        Main.setCurrentPanel(() -> new EditServiceOrderWindow(-1));
     }
 
     public static void viewServiceOrder(int orderID) {
-        Main.setCurrentPanel(new EditServiceOrderWindow(orderID));
+        Main.setCurrentPanel(() -> new EditServiceOrderWindow(orderID));
     }
 }

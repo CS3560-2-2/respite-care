@@ -27,7 +27,7 @@ public class ManagerClientNoteViewer extends JPanel {
             ClientNotePreview preview = new ClientNotePreview(
                     notes[i],
                     id -> {
-                        Main.setCurrentPanel(new ClientNoteViewer(id));
+                        Main.setCurrentPanel(() -> new ClientNoteViewer(id));
                     }
             );
             notesPanel.add(preview);

@@ -37,27 +37,27 @@ public class PortalWindow extends JPanel {
 		// Buttons
 		JButton butTimeSheets = new JButton("Manage Time Sheets");
 		butTimeSheets.addActionListener(e -> {
-			Main.setCurrentPanel(new TimesheetWindow(-1));
+			Main.setCurrentPanel(() -> new TimesheetWindow(-1));
 		});
 		JButton butServiceOrders = new JButton("Manage Service Orders");
-		butServiceOrders.addActionListener(e -> {Main.setCurrentPanel(new ServiceOrderWindow());});
+		butServiceOrders.addActionListener(e -> {Main.setCurrentPanel(() -> new ServiceOrderWindow());});
 		JButton butManageNotes = new JButton("Manage Notes");
-		butManageNotes.addActionListener(e -> {Main.setCurrentPanel(new ManagerClientNoteViewer());});
+		butManageNotes.addActionListener(e -> {Main.setCurrentPanel(() -> new ManagerClientNoteViewer());});
 
 		JButton butManageCaseworkers = new JButton("Manage Caseworkers");
-		butManageCaseworkers.addActionListener(e -> {Main.setCurrentPanel(new CaseworkerManagementWindow());});
+		butManageCaseworkers.addActionListener(e -> {Main.setCurrentPanel(() -> new CaseworkerManagementWindow());});
 
 		JButton butManageServices = new JButton("Manage Services");
-		butManageServices.addActionListener(e -> {Main.setCurrentPanel(new ServiceTypeManagementWindow());});
+		butManageServices.addActionListener(e -> {Main.setCurrentPanel(() -> new ServiceTypeManagementWindow());});
 
 
 		JButton butTimeSheetsCWorker = new JButton("Time Sheets");
 		butTimeSheetsCWorker.addActionListener(e -> {
-			Main.setCurrentPanel(new TimesheetWindow(100000010));
+			Main.setCurrentPanel(() -> new TimesheetWindow(100000010));
 		});
 
 		JButton butSubmitFeedback = new JButton("Submit Feedback");
-		butSubmitFeedback.addActionListener(e -> {Main.setCurrentPanel(new ClientNotesView());}); // TODO: This does nothing as of now
+		butSubmitFeedback.addActionListener(e -> {Main.setCurrentPanel(() -> new ClientNotesView());}); // TODO: This does nothing as of now
 		          
 		// Add the buttons and labels to the frame
 

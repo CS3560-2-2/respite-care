@@ -29,7 +29,7 @@ public class ClientNotesView extends JPanel {
             ClientNotePreview preview = new ClientNotePreview(
                     notes[i],
                     id -> {
-                        Main.setCurrentPanel(new ClientNoteViewer(id));
+                        Main.setCurrentPanel(() -> new ClientNoteViewer(id));
                     }
             );
             notesPanel.add(preview);
@@ -41,7 +41,7 @@ public class ClientNotesView extends JPanel {
         JButton newEntryButton = new JButton("Create New Note");
         newEntryButton.addActionListener(e -> {
             // TODO: Get ID of current client
-            Main.setCurrentPanel(new ClientNoteEditor(0));
+            Main.setCurrentPanel(() -> new ClientNoteEditor(0));
         });
         bottomPannel.add(newEntryButton);
         this.add(bottomPannel, BorderLayout.AFTER_LAST_LINE);

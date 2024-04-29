@@ -37,7 +37,7 @@ public class TimesheetWindow extends JPanel {
 
 		JButton butAddEntry = new JButton("+ Add Entry");
 		butAddEntry.addActionListener(e -> {
-			Main.setCurrentPanel(new TimesheetEntryWindow(employeeID));
+			Main.setCurrentPanel(() -> new TimesheetEntryWindow(employeeID));
 		});
 		JButton butBack = new JButton("Back");
 		butBack.addActionListener(e -> {Main.previousPanel();});
@@ -78,7 +78,7 @@ public class TimesheetWindow extends JPanel {
 			entryPanel.add(new TimesheetEntryPreview(
 					timetableEntry,
 					e -> {
-						Main.setCurrentPanel(new TimesheetEntryWindow((long)timetableEntry.get("ssn"), (int)timetableEntry.get("timesheetID")));
+						Main.setCurrentPanel(() -> new TimesheetEntryWindow((long)timetableEntry.get("ssn"), (int)timetableEntry.get("timesheetID")));
 						},
 					true));
 		}

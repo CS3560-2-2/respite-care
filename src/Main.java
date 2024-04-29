@@ -10,7 +10,8 @@ import lib.Connector;
 public class Main {
 	// The main JFrame for the application
 	public static JFrame frame;
-	public static Stack<JPanel> panelStack;
+	public static JPanel currentPanel;
+	public static Stack<JPanelBuilder> panelStack;
 
 	public static void main(String[] args) {
 		Connector.testDictionaryGet();
@@ -19,23 +20,25 @@ public class Main {
 		Dimension minDim = new Dimension();
 		minDim.setSize(600, 400);
 		frame.setMinimumSize(minDim);
-		panelStack = new Stack<JPanel>();
+		panelStack = new Stack<JPanelBuilder>();
 		// Start up the GUI
-		setCurrentPanel(new PortalWindow());
+		setCurrentPanel(() -> new PortalWindow());
 
 		frame.setVisible(true);
 	}
 	
 	// Switch to a new panel 
-	public static void setCurrentPanel(JPanel panel) {
+	public static void setCurrentPanel(JPanelBuilder panel) {
 		// Remove the current panel (if any)
 		if (panelStack.size() > 0)
 		{
-			frame.remove(panelStack.peek());
+			frame.remove(currentPanel);
 		}
+		currentPanel = panel.run();
 		panelStack.push(panel);
-		frame.add(panel);
+		frame.add(currentPanel);
 		frame.validate();
+		frame.repaint();
 	}
 	
 	// Go back to the previous panel
@@ -45,11 +48,12 @@ public class Main {
 	public static void previousPanel() {
 		// If we have multiple panels, remove the topmost one
 		if(panelStack.size() > 1) {
-			frame.remove(panelStack.pop());
+			frame.remove(currentPanel);
+			panelStack.pop();
 		}
 		// Switch to the panel directly before it
-		panelStack.peek().repaint();
-		frame.add(panelStack.peek());
+		currentPanel = panelStack.peek().run();
+		frame.add(currentPanel);
 		frame.validate();
 		frame.repaint();
 		frame.setVisible(true);

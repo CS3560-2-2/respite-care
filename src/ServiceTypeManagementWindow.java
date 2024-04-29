@@ -19,7 +19,7 @@ public class ServiceTypeManagementWindow extends JPanel {
 
         JButton butAddEntry = new JButton("+ New Service");
         butAddEntry.addActionListener(e -> {
-            Main.setCurrentPanel(new ServiceTypeEditorWindow(-1));
+            Main.setCurrentPanel(() -> new ServiceTypeEditorWindow(-1));
         });
         JButton butBack = new JButton("Back");
         butBack.addActionListener(e -> {Main.previousPanel();});
@@ -55,7 +55,7 @@ public class ServiceTypeManagementWindow extends JPanel {
         for(Map<String, Object> service : services) {
             pageContentPanel.add(new ServiceTypePreview(
                     service,
-                    e -> {Main.setCurrentPanel(new ServiceTypeEditorWindow((int)service.get("serviceID")));},
+                    e -> {Main.setCurrentPanel(() -> new ServiceTypeEditorWindow((int)service.get("serviceID")));},
                     true
             ));
         }
