@@ -27,7 +27,7 @@ public class TimesheetWindow extends JPanel {
 		if (employeeID == -1) {
 			employeeName = "Manager";
 		} else {
-			Map<String, Object> employeeInfo = MyConnector.getList("Person WHERE ssn='" + employeeID + "'").get(0);
+			Map<String, Object> employeeInfo = Connector.getMatchingRows("Person", Map.of("ssn", (long)employeeID)).get(0);
 			employeeName = employeeInfo.get("firstName") + " " + employeeInfo.get("lastName");
 		}
 

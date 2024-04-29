@@ -49,6 +49,12 @@ public class ServiceTypeEditorWindow extends JPanel {
             serviceName.setText(existingSeviceData.get("serviceType").toString());
             priceField.setText(existingSeviceData.get("hourlyRate").toString());
 
+            JButton delButton = new JButton("Delete Service");
+            delButton.addActionListener(e -> {
+                Connector.deleteRow("Service", existingSeviceData);
+                Main.previousPanel();
+            });
+            topInfoLayout.add(delButton);
         }
 
         this.add(formContent, BorderLayout.CENTER);

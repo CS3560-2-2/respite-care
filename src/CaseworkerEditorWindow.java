@@ -86,6 +86,20 @@ public class CaseworkerEditorWindow extends JPanel {
             dobField.setText(existingPersonData.get("dateOfBirth").toString());
             certField.setText(existingCaseworkerData.get("certification").toString());
 
+            JButton delButton = new JButton("Delete Caseworker");
+            delButton.addActionListener(e -> {
+                //Map<String, Object> address = Connector.getMatchingRows("Address", Map.of("ssn", existingPersonData.get("ssn"))).t(0);
+                //Connector.deleteRow("Address", address);
+
+                Connector.deleteRow("Caregiver", existingCaseworkerData);
+                Connector.deleteRow("Person", existingPersonData);
+
+
+                Main.previousPanel();
+            });
+            topInfoLayout.add(delButton);
+
+
         }
 
         this.add(formContent, BorderLayout.CENTER);

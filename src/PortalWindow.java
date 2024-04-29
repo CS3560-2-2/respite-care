@@ -1,12 +1,10 @@
 import java.awt.*;
+import java.util.Locale;
 import javax.swing.*;
 
 public class PortalWindow extends JPanel {
-	// TODO: Get these from somewhere else
-	String userName = "Rea L. User";
-	String position = "Manager";
 	
-	public PortalWindow() {
+	public PortalWindow(String[] args) {
 		super();
 
 		this.setLayout(new BorderLayout());
@@ -14,18 +12,7 @@ public class PortalWindow extends JPanel {
 		// Labels (text)
 		JPanel userInfoLayout = new JPanel();
 		userInfoLayout.setLayout(new BoxLayout(userInfoLayout, BoxLayout.PAGE_AXIS));
-
-
-		JLabel labPortal = new JLabel("Respite Care Portal");
-		labPortal.setBounds(25, 0, 500, 40);
-		JLabel labUser = new JLabel("Currently Logged In As: " + userName);
-		labUser.setBounds(25, 25, 500, 40);
-		JLabel labPosition = new JLabel("Position: " + position);
-		labPosition.setBounds(25, 50, 500, 40);
-
-		userInfoLayout.add(labPortal);
-		userInfoLayout.add(labUser);
-		userInfoLayout.add(labPosition);
+		userInfoLayout.add(new JLabel("Respite Care Management System"));
 
 		this.add(userInfoLayout, BorderLayout.BEFORE_FIRST_LINE);
 
@@ -61,16 +48,23 @@ public class PortalWindow extends JPanel {
 		          
 		// Add the buttons and labels to the frame
 
-		buttonLayout.add(new JLabel("Manager Use Cases"));
-		buttonLayout.add(butTimeSheets);
-		buttonLayout.add(butServiceOrders);
-		buttonLayout.add(butManageNotes);
-		buttonLayout.add(butManageCaseworkers);
-		buttonLayout.add(butManageServices);
-		buttonLayout.add(new JLabel("Client Use Cases"));
-		buttonLayout.add(butTimeSheetsCWorker);
-		buttonLayout.add(new JLabel("Case Worker Use Cases"));
-		buttonLayout.add(butSubmitFeedback);
+		if(args[0].toLowerCase(Locale.ROOT).equals("m")){
+			buttonLayout.add(new JLabel("Manager Use Cases"));
+			buttonLayout.add(butTimeSheets);
+			buttonLayout.add(butServiceOrders);
+			buttonLayout.add(butManageNotes);
+			buttonLayout.add(butManageCaseworkers);
+			buttonLayout.add(butManageServices);
+		}
+		if(args[0].toLowerCase(Locale.ROOT).equals("c")) {
+			buttonLayout.add(new JLabel("Client Use Cases"));
+			buttonLayout.add(butSubmitFeedback);
+		}
+		if(args[0].toLowerCase(Locale.ROOT).equals("w")) {
+			buttonLayout.add(new JLabel("Case Worker Use Cases"));
+			buttonLayout.add(butTimeSheetsCWorker);
+		}
+
 
 
 
