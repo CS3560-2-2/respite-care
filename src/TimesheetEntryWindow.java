@@ -1,5 +1,9 @@
+import lib.MyConnector;
+
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Map;
 import javax.swing.*;
 
 public class TimesheetEntryWindow extends JPanel {
@@ -18,12 +22,19 @@ public class TimesheetEntryWindow extends JPanel {
 	String notes = "Very needy on Mondays...";
 	
 	// Called when creating a new entry
-	public TimesheetEntryWindow(int employeeID) {
+	public TimesheetEntryWindow(long employeeID) {
 		this(employeeID, -1);
 	}
 	
 	// Called when updating an existing entry
-	public TimesheetEntryWindow(int employeeID, int entryID) {
+	public TimesheetEntryWindow(long employeeID, long entryID) {
+
+		Map<String, Object> existingEntryData = Map.of();
+
+		if(entryID != -1) {
+			existingEntryData = MyConnector.getList("Timesheet WHERE timesheetID='" + entryID + "'").get(0);
+		}
+
 
 		this.setLayout(new BorderLayout());
 
@@ -32,6 +43,8 @@ public class TimesheetEntryWindow extends JPanel {
 
 		JPanel entryDataPanel = new JPanel();
 		entryDataPanel.setLayout(new BoxLayout(entryDataPanel, BoxLayout.PAGE_AXIS));
+
+
 
 		JPanel entryDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel labEntryDate = new JLabel("Entry Date: ");
@@ -85,12 +98,15 @@ public class TimesheetEntryWindow extends JPanel {
 		// If we've been given an entry ID, pre-populate the fields with the entry's data
 		if (entryID != -1)
 		{
+			String[] startTime = ((LocalDateTime)existingEntryData.get("startTime")).toString().split("T");
+			String[] endTime = ((LocalDateTime)existingEntryData.get("endTime")).toString().split("T");
+
 			// TODO: Get all this data from the database instead
-			textEntryDate.setText(entryDate);
-			textStartTime.setText(startTime);
-			textEndTime.setText(endTime);
+			textEntryDate.setText(startTime[0]);
+			textStartTime.setText(startTime[1]);
+			textEndTime.setText(endTime[1]);
 			comboServiceOrder.setSelectedIndex(serviceOrderIndex);
-			textNotes.setText(notes);
+			textNotes.setText("");
 		}
 		
 		// Buttons
@@ -135,7 +151,7 @@ public class TimesheetEntryWindow extends JPanel {
 	}
 	
 	// Remove a timesheet entry from the database
-	private void deleteEntry(int entryID) {
+	private void deleteEntry(long entryID) {
 		// TODO: Auto-generated method stub
 		System.out.println("Timesheet entry deleted!");
 		// Return to the timesheet panel

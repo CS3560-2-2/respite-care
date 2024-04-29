@@ -75,7 +75,12 @@ public class TimesheetWindow extends JPanel {
 		}
 
 		for (Map<String, Object> timetableEntry : timetableEntries) {
-			entryPanel.add(new TimesheetEntryPreview(timetableEntry, e -> {editEntry((int)timetableEntry.get("timesheetID"));}, true));
+			entryPanel.add(new TimesheetEntryPreview(
+					timetableEntry,
+					e -> {
+						Main.setCurrentPanel(new TimesheetEntryWindow((long)timetableEntry.get("ssn"), (int)timetableEntry.get("timesheetID")));
+						},
+					true));
 		}
 
 		this.add(topInfoLayout, BorderLayout.BEFORE_FIRST_LINE);
@@ -88,9 +93,7 @@ public class TimesheetWindow extends JPanel {
 
 	}
 
-	public static void editEntry(int entryID) {
 
-	}
 	
 	// Change which timesheet entries are visible depending on the page
 	/*

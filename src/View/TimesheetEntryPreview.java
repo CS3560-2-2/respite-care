@@ -3,12 +3,13 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.function.Consumer;
 
 public class TimesheetEntryPreview extends JPanel {
 
-    public TimesheetEntryPreview(Map<String, Object> entryData, Consumer<ActionEvent> editEvent, boolean editEnabled) {
+    public TimesheetEntryPreview(Map<String, Object> entryData, ActionListener editEvent, boolean editEnabled) {
         this.setLayout(new BorderLayout());
 
         //TODO: Get entry data from database
@@ -18,6 +19,7 @@ public class TimesheetEntryPreview extends JPanel {
 
         JButton editButton = new JButton("Edit");
         editButton.setEnabled(editEnabled);
+        editButton.addActionListener(editEvent);
         // TODO: call `TimesheetEntryWindow(String employeeName, int entryID)` when clicked
         this.add(editButton, BorderLayout.LINE_END);
     }
