@@ -16,7 +16,9 @@ public class CaseworkerManagementWindow extends JPanel {
         topInfoLayout.add(new JLabel("Manage Caseworkers"));
 
         JButton butAddEntry = new JButton("+ New Caseworker");
-        butAddEntry.addActionListener(e -> {});
+        butAddEntry.addActionListener(e -> {
+            Main.setCurrentPanel(new CaseworkerEditorWindow(-1));
+        });
         JButton butBack = new JButton("Back");
         butBack.addActionListener(e -> {Main.previousPanel();});
         topInfoLayout.add(butAddEntry);
@@ -32,7 +34,9 @@ public class CaseworkerManagementWindow extends JPanel {
         for(Map<String, Object> caregiver : caregivers) {
             pageContentPanel.add(new CaseworkerPreview(
                     caregiver,
-                    e -> {},
+                    e -> {
+                        Main.setCurrentPanel(new CaseworkerEditorWindow((long)caregiver.get("ssn")));
+                    },
                     true
             ));
         }
