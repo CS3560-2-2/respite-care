@@ -14,7 +14,6 @@ public class TimesheetEntryWindow extends JPanel {
 	JTextField textEntryDate;
 	JTextField textStartTime;
 	JTextField textEndTime;
-	JTextArea textNotes;
 	JComboBox comboServiceOrder;
 	
 	// TODO: Get this data from somewhere else
@@ -23,7 +22,7 @@ public class TimesheetEntryWindow extends JPanel {
 	String startTime = "10:25AM";
 	String endTime = "4:45PM";
 	int serviceOrderIndex = 1;
-	String notes = "Very needy on Mondays...";
+
 	
 	// Called when creating a new entry
 	public TimesheetEntryWindow(long employeeID) {
@@ -90,16 +89,6 @@ public class TimesheetEntryWindow extends JPanel {
 		entryDataPanel.add(entryServiceOrderPanel);
 
 
-		JPanel entryNotesPanel = new JPanel(new BorderLayout());
-		JLabel labNotes = new JLabel("Notes: ");
-		labNotes.setHorizontalAlignment(JLabel.LEFT);
-		textNotes = new JTextArea(4, 50);
-		textNotes.setLineWrap(true);
-		JScrollPane scrollPane = new JScrollPane(textNotes);
-		entryNotesPanel.add(labNotes, BorderLayout.BEFORE_FIRST_LINE);
-		entryNotesPanel.add(scrollPane, BorderLayout.CENTER);
-		entryDataPanel.add(entryNotesPanel);
-
 		this.add(entryDataPanel, BorderLayout.CENTER);
 		
 		// If we've been given an entry ID, pre-populate the fields with the entry's data
@@ -113,7 +102,6 @@ public class TimesheetEntryWindow extends JPanel {
 			textStartTime.setText(startTime[1]);
 			textEndTime.setText(endTime[1]);
 			comboServiceOrder.setSelectedIndex(serviceOrderIndex);
-			textNotes.setText("");
 		}
 		
 		// Buttons
@@ -142,39 +130,46 @@ public class TimesheetEntryWindow extends JPanel {
 
 	// Gather the data from the fields and submit them
 	// TODO: There's no form of error-checking here! For now we just hope the user plays nice.
-	private void submitEntryInfo(int serviceOrderID, long employeeID) {
-		if(serviceOrderID == -1) {
-			Random rand = new Random();
-			serviceOrderID = rand.nextInt();
-		}
-
-		// TODO: Maybe use different data types for these values?
+	private void submitEntryInfo(int timesheetID, long employeeID) {
 		String entryDate = textEntryDate.getText();
 		String startTime = textStartTime.getText();
 		String endTime = textEndTime.getText();
-		// TODO: Refer to the database service orders here
 		int serviceOrder = assignedServiceOrders[comboServiceOrder.getSelectedIndex()];
-		String notes = textEntryDate.getText();
-
-		MyConnector.insertIntoTable("Timesheet", List.of(
-				"" + serviceOrderID,
-				"" + serviceOrder,
-				"" + employeeID,
-				entryDate + " " + startTime + ":00",
-				entryDate + " " + endTime + ":00"
-		));
-
-		// TODO: Submit the new/updated info into the database somehow
+	
+		// Format startTime and endTime into DATETIME format
+		String formattedStartTime = entryDate + " " + startTime + ":00";
+		String formattedEndTime = entryDate + " " + endTime + ":00";
+	
+		Map<String, Object> updatedEntryData = new HashMap<>();
+		updatedEntryData.put("startTime", formattedStartTime);
+		updatedEntryData.put("endTime", formattedEndTime);
+		updatedEntryData.put("authNumber", serviceOrder);
+		updatedEntryData.put("ssn", employeeID);
+	
+		if (timesheetID == -1) {
+			// Create a new timesheet entry
+			// Random rand = new Random(); //Commented out because mysql doesn't should generate key
+			// int newTimesheetID = rand.nextInt(1000000); // Generate a random timesheetID
+			// updatedEntryData.put("timesheetID", newTimesheetID);
+			Connector.insertRow("Timesheet", updatedEntryData);
+		} else {
+			// Update an existing timesheet entry
+			Map<String, Object> oldEntryData = new HashMap<>();
+			oldEntryData.put("timesheetID", timesheetID);
+			Connector.updateRow("Timesheet", oldEntryData, updatedEntryData);
+		}
+	
 		System.out.println("Timesheet entry submitted!");
-		// Return to the timesheet panel
 		Main.previousPanel();
 	}
 	
 	// Remove a timesheet entry from the database
 	private void deleteEntry(long entryID) {
-		// TODO: Auto-generated method stub
+		Map<String, Object> entryData = new HashMap<>();
+		entryData.put("timesheetID", entryID);
+		Connector.deleteRow("Timesheet", entryData);
+	
 		System.out.println("Timesheet entry deleted!");
-		// Return to the timesheet panel
 		Main.previousPanel();
 	}
 }

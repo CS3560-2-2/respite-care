@@ -71,7 +71,8 @@ public class TimesheetWindow extends JPanel {
 		if (employeeID == -1) {
 			timetableEntries = Connector.getList("Timesheet");
 		} else {
-			timetableEntries = Connector.customQuery("Timesheet WHERE ssn='" + employeeID + "'");
+			Map<String, Object> employeeFilter = Map.of("ssn", employeeID);
+			timetableEntries = Connector.getMatchingRows("Timesheet", employeeFilter);
 		}
 		for (Map<String, Object> timetableEntry : timetableEntries) {
 			entryPanel.add(new TimesheetEntryPreview(
