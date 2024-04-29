@@ -5,18 +5,17 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
-import lib.MyConnector;
-import lib.MyConnector.*;
+import lib.Connector;
 
 public class Main {
 
-	//MyConnector.testSqlObjectReturnTable();
+	MyConnector.testSqlObjectReturnTable();
 
 	public static JFrame frame;
 	public static Stack<JPanel> panelStack;
 
 	public static void main(String[] args) {
+		Connector.testDictionaryGet();
 		frame = new JFrame("Respite Management Portal");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension minDim = new Dimension();
