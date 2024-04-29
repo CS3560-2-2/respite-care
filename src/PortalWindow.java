@@ -47,6 +47,10 @@ public class PortalWindow extends JPanel {
 		JButton butManageCaseworkers = new JButton("Manage Caseworkers");
 		butManageCaseworkers.addActionListener(e -> {Main.setCurrentPanel(new CaseworkerManagementWindow());});
 
+		JButton butManageServices = new JButton("Manage Services");
+		butManageServices.addActionListener(e -> {Main.setCurrentPanel(new ServiceTypeManagementWindow());});
+
+
 		JButton butTimeSheetsCWorker = new JButton("Time Sheets");
 		butTimeSheetsCWorker.addActionListener(e -> {
 			Main.setCurrentPanel(new TimesheetWindow(100000010));
@@ -62,6 +66,7 @@ public class PortalWindow extends JPanel {
 		buttonLayout.add(butServiceOrders);
 		buttonLayout.add(butManageNotes);
 		buttonLayout.add(butManageCaseworkers);
+		buttonLayout.add(butManageServices);
 		buttonLayout.add(new JLabel("Client Use Cases"));
 		buttonLayout.add(butTimeSheetsCWorker);
 		buttonLayout.add(new JLabel("Case Worker Use Cases"));
